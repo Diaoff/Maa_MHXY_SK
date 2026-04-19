@@ -382,6 +382,7 @@
                             "next": [
                                 "活动-三界奇缘-结束",
                                 "主界面",
+                                "[JumpBack]清理主界面使用-关闭",
                                 "[JumpBack]活动-三界奇缘-开始答题",
                                 "[JumpBack]panduan_zhujiemian"
                             ]
@@ -395,6 +396,7 @@
                             "next": [
                                 "活动-三界奇缘-结束",
                                 "主界面",
+                                "[JumpBack]清理主界面使用-关闭",
                                 "[JumpBack]活动-三界奇缘-开始答题_agent",
                                 "[JumpBack]panduan_zhujiemian"
                             ]
