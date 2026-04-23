@@ -14,7 +14,7 @@ class AIAnswer(CustomRecognition):
          context: Context,
          argv: CustomRecognition.AnalyzeArg,
      ) -> CustomRecognition.AnalyzeResult:
-            logger.info("进入AIAnswer")
+            # logger.info("进入AIAnswer")
             # 对问题进行排序
             def sort_ocr_results_by_position(ocr_results):
                 # 定义行高阈值，如果两个框的y坐标差距小于这个值，认为它们在同一行
@@ -147,7 +147,9 @@ class AIAnswer(CustomRecognition):
             # logger.info(f"答案为：{answer}")
             # 获取传参节点apikey数据
             # UIpiKey: dict = context.get_node_data("AIapikey")['recognition']['param']['custom_recognition_param']['apikey']
-            UIpiKey: dict = context.get_node_data("活动-科举乡试-开始答题agent-Deepseek")["attach"]["apikey"]
+            UIpiKey: dict = context.get_node_data("活动-科举乡试-开始答题API")["attach"]["apikey"]
+            UIurl:dict = context.get_node_data("活动-科举乡试-开始答题API")["attach"]["url"]
+            UImodel:dict = context.get_node_data("活动-科举乡试-开始答题API")["attach"]["model"]
             # logger.info(f"用户输入的aikey: {data1}")
             # 向ai发送问题及答案并获得正确答案
             def get_ai_answer(question, answers):
@@ -160,8 +162,8 @@ class AIAnswer(CustomRecognition):
                 for key, value in valid_answers.items():
                     prompt += f"{key}: {value}\n"
 
-                # DeepSeek API的URL和密钥
-                url = "https://api.deepseek.com/v1/chat/completions"
+                # openai api协议调用
+                url = UIurl
                 apiKey = UIpiKey
 
                 headers = {
@@ -170,7 +172,7 @@ class AIAnswer(CustomRecognition):
                 }
 
                 data = {
-                    "model": "deepseek-chat",
+                    "model": UImodel,   
                     "messages": [
                         {"role": "system", "content": "You are a helpful assistant."},
                         {"role": "user", "content": prompt}

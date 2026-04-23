@@ -162,7 +162,7 @@
             "option": [
                 "是否使用Ai进行答题"
             ],
-            "description": "1.默认不使用AI，全选A,2.科举乡试使用AI答题，请在填写Key,支持deepseek及智谱。"
+            "description": "./docs/description/kejuxiangshi.md"
         },
         {
             "name": "活跃领取",
@@ -468,10 +468,12 @@
             ]
         },
         "是否使用Ai进行答题": {
-            "type": "select",
+            "type": "switch",
+            "default_case": "Yes",
+            "description": "是否使用ai答题",
             "cases": [
                 {
-                    "name": "不适用AI",
+                    "name": "No",
                     "pipeline_override": {
                         "活动-科举乡试-进入答题界面": {
                             "next": [
@@ -483,33 +485,19 @@
                     }
                 },
                 {
-                    "name": "使用deepseek",
+                    "name": "Yes",
+                    "description": "支持OpenaiAPI规范的模型",
                     "pipeline_override": {
                         "活动-科举乡试-进入答题界面": {
                             "next": [
                                 "活动-科举乡试-结束-图片",
                                 "活动-科举乡试-结束ocr",
-                                "[JumpBack]活动-科举乡试-开始答题agent-Deepseek"
+                                "[JumpBack]活动-科举乡试-开始答题API"
                             ]
                         }
                     },
                     "option": [
                         "Deepseek_apikey"
-                    ]
-                },
-                {
-                    "name": "使用智谱",
-                    "pipeline_override": {
-                        "活动-科举乡试-进入答题界面": {
-                            "next": [
-                                "活动-科举乡试-结束-图片",
-                                "活动-科举乡试-结束ocr",
-                                "[JumpBack]活动-科举乡试-开始答题agent-智谱"
-                            ]
-                        }
-                    },
-                    "option": [
-                        "zhipu_apikey"
                     ]
                 }
             ]
@@ -550,34 +538,33 @@
         },
         "Deepseek_apikey": {
             "type": "input",
+            "description": "支持OpenaiAPI规范的模型",
             "inputs": [
                 {
-                    "name": "Deepseek_apikey",
+                    "name": "apikey",
                     "pipeline_type": "string",
-                    "default": ""
+                    "default": "",
+                    "description": "API密钥"
+                },
+                {
+                    "name": "url",
+                    "pipeline_type": "string",
+                    "default": "",
+                    "description": "url链接"
+                },
+                {
+                    "name": "model",
+                    "pipeline_type": "string",
+                    "default": "",
+                    "description": "模型"
                 }
             ],
             "pipeline_override": {
-                "活动-科举乡试-开始答题agent-Deepseek": {
+                "活动-科举乡试-开始答题API": {
                     "attach": {
-                        "apikey": "{Deepseek_apikey}"
-                    }
-                }
-            }
-        },
-        "zhipu_apikey": {
-            "type": "input",
-            "inputs": [
-                {
-                    "name": "zhipu_apikey",
-                    "pipeline_type": "string",
-                    "default": ""
-                }
-            ],
-            "pipeline_override": {
-                "活动-科举乡试-开始答题agent-智谱": {
-                    "attach": {
-                        "apikey": "{zhipu_apikey}"
+                        "apikey": "{apikey}",
+                        "url": "{url}",
+                        "model": "{model}"
                     }
                 }
             }
@@ -795,9 +782,11 @@
                 {
                     "name": "科举乡试",
                     "option": {
-                        "是否使用Ai进行答题": "使用智谱",
-                        "zhipu_apikey": {
-                            "zhipu_apikey": ""
+                        "是否使用Ai进行答题": "Yes",
+                        "Deepseek_apikey": {
+                            "Deepseek_apikey": "",
+                            "Deepseek_url": "",
+                            "Deepseek_model": ""
                         }
                     }
                 },

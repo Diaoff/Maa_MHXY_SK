@@ -225,12 +225,14 @@
             58
         ]
     },
-    "活动-科举乡试-开始答题agent-Deepseek": {
+    "活动-科举乡试-开始答题API": {
         "max_hit": 100,
         "recognition": "Custom",
         "custom_recognition": "AIAnswer",
         "attach": {
-            "apikey": ""
+            "apikey": "",
+            "url": "",
+            "model": ""
         }
     },
     "活动-科举乡试-开始答题agent-智谱": {
