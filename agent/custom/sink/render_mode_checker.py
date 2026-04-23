@@ -396,7 +396,7 @@ class MuMuRenderChecker(TaskerEventSink):
         logger.debug(f"获取到 ADB 路径: {adb_path}")
 
         if not is_mumu_simulator(adb_path):
-            logger.info("非 MuMu 模拟器，跳过渲染模式检查")
+            logger.debug("非 MuMu 模拟器，跳过渲染模式检查")
             return
 
         logger.debug("检测到 MuMu 模拟器，开始检查渲染模式")
