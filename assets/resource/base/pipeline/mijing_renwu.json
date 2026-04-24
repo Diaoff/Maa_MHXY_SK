@@ -364,8 +364,8 @@
             74
         ],
         "next": [
-            "秘境-点击离开",
             "[JumpBack]清理主界面使用-关闭",
+            "秘境-点击离开",
             "[JumpBack]panduan_zhujiemian"
         ]
     },
@@ -399,7 +399,9 @@
             100
         ],
         "next": [
-            "秘境-点击离开"
+            "[JumpBack]清理主界面使用-关闭",
+            "秘境-点击离开",
+            "[JumpBack]panduan_zhujiemian"
         ]
     },
     "日月之井-失败": {
@@ -416,8 +418,8 @@
             375
         ],
         "next": [
-            "秘境-点击离开",
             "[JumpBack]清理主界面使用-关闭",
+            "秘境-点击离开",
             "[JumpBack]panduan_zhujiemian"
         ]
     },
@@ -431,6 +433,9 @@
             353,
             114,
             196
-        ]
+        ],
+        "pre_delay": 1000,
+        "action": "Click",
+        "post_delay": 1500
     }
 }

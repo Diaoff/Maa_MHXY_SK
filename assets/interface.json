@@ -235,6 +235,10 @@
         {
             "name": "九黎演武",
             "entry": "jiuliyanwu"
+        },
+        {
+            "name": "五行修业",
+            "entry": "wuxingxiuye"
         }
     ],
     "option": {
@@ -497,7 +501,7 @@
                         }
                     },
                     "option": [
-                        "Deepseek_apikey"
+                        "Seed_apikey"
                     ]
                 }
             ]
@@ -536,7 +540,7 @@
                 }
             }
         },
-        "Deepseek_apikey": {
+        "Seed_apikey": {
             "type": "input",
             "description": "支持OpenaiAPI规范的模型",
             "inputs": [
@@ -759,6 +763,9 @@
                     "name": "秘境降妖"
                 },
                 {
+                    "name": "整理背包"
+                },
+                {
                     "name": "宝图任务"
                 },
                 {
@@ -783,10 +790,10 @@
                     "name": "科举乡试",
                     "option": {
                         "是否使用Ai进行答题": "Yes",
-                        "Deepseek_apikey": {
-                            "Deepseek_apikey": "",
-                            "Deepseek_url": "",
-                            "Deepseek_model": ""
+                        "Seed_apikey": {
+                            "apikey": "",
+                            "url": "",
+                            "model": ""
                         }
                     }
                 },
@@ -852,6 +859,27 @@
                 },
                 {
                     "name": "退出队伍"
+                }
+            ]
+        },
+        {
+            "name": "其他任务",
+            "description": "非日常、非副本任务",
+            "task": [
+                {
+                    "name": "门派闯关"
+                },
+                {
+                    "name": "迷魂塔"
+                },
+                {
+                    "name": "召唤灵海底"
+                },
+                {
+                    "name": "九黎演武"
+                },
+                {
+                    "name": "五行修业"
                 }
             ]
         }
