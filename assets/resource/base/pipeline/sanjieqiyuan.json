@@ -208,6 +208,16 @@
             "[JumpBack]panduan_zhujiemian"
         ]
     },
+    "活动-三界奇缘-正确率": {
+        "recognition": "OCR",
+        "expected": [],
+        "roi": [
+            320,
+            69,
+            116,
+            51
+        ]
+    },
     "活动-三界奇缘-结束": {
         "recognition": "OCR",
         "expected": [
@@ -220,6 +230,13 @@
             43
         ],
         "pre_delay": 200,
+        "action": "Custom",
+        "custom_action": "returnOCR",
+        "custom_action_param": {
+            "recognition_name": "活动-三界奇缘-正确率",
+            "action_key": "",
+            "return_text": "三界奇缘结果正确率："
+        },
         "next": [
             "panduan_zhujiemian"
         ]
