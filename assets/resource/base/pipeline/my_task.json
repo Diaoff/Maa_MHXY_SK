@@ -336,5 +336,23 @@
             ]
         ]
     },
-    "空节点": {}
+    "空节点": {},
+    "识别输出测试": {
+        "recognition": "OCR",
+        "expected": [],
+        "roi": [
+            916,
+            316,
+            139,
+            45
+        ],
+        "action": "Custom",
+        "custom_action": "returnOCR",
+        "custom_action_param": {
+            "recognition_name": "识别输出测试",
+            "action_key": "Click",
+            "return_text": "输出的描述"
+        },
+        "next": []
+    }
 }
