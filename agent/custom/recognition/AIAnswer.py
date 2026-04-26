@@ -177,6 +177,7 @@ class AIAnswer(CustomRecognition):
                         {"role": "system", "content": "You are a helpful assistant."},
                         {"role": "user", "content": prompt}
                     ],
+                    "thinking": {"type": "disabled"},
                     "temperature": 0.7,
                     "max_tokens": 10,
                     "stream": False
