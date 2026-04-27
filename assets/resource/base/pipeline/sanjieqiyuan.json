@@ -28,7 +28,8 @@
         "post_wait_freezes": 100,
         "next": [
             "活动-三界奇缘",
-            "[JumpBack]活动-界面-打开失败-点击活动图片"
+            "[JumpBack]活动-界面-打开失败-点击活动图片",
+            "[JumpBack]战斗平衡弹窗-点击关闭"
         ]
     },
     "活动-三界奇缘": {
@@ -229,7 +230,7 @@
             262,
             43
         ],
-        "pre_delay": 200,
+        "pre_delay": 500,
         "action": "Custom",
         "custom_action": "returnOCR",
         "custom_action_param": {
