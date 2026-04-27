@@ -162,6 +162,13 @@
             "活动-科举乡试-结束ocr1",
             "活动-科举乡试-结束ocr2"
         ],
+        "action": "Custom",
+        "custom_action": "returnOCR",
+        "custom_action_param": {
+            "recognition_name": "活动-科举乡试-正确率",
+            "action_key": "",
+            "return_text": "科举乡试结果正确率："
+        },
         "next": [
             "panduan_zhujiemian"
         ]
@@ -212,6 +219,13 @@
             98
         ],
         "threshold": 0.9,
+        "action": "Custom",
+        "custom_action": "returnOCR",
+        "custom_action_param": {
+            "recognition_name": "活动-科举乡试-正确率",
+            "action_key": "",
+            "return_text": "科举乡试结果正确率："
+        },
         "next": [
             "panduan_zhujiemian"
         ]
@@ -243,5 +257,15 @@
         "attach": {
             "apikey": ""
         }
+    },
+    "活动-科举乡试-正确率": {
+        "recognition": "OCR",
+        "expected": [],
+        "roi": [
+            863,
+            149,
+            78,
+            43
+        ]
     }
 }

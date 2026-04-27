@@ -4,4 +4,4 @@
 支持openaiapi规范的模型：  
  - 如deepseek模型  
  - url=https://api.deepseek.com/v1/chat/completions  
- - model=deepseek-chat  
+ - model=deepseek-v4-flash
