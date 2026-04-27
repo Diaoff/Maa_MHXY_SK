@@ -1,73 +1,139 @@
 <!-- markdownlint-disable MD033 MD041 -->
 <p align="center">
-  <img alt="LOGO" src="./docs/img/logo.png" width="256"  />
+  <img alt="LOGO" src="./docs/img/logo.png" width="220" />
 </p>
 
 <div align="center">
 
 # MAA_MHXY_MG
 
-基于全新架构的 梦幻西游手游 小助手。图像技术 + 模拟控制，解放双手！
-由 [MaaFramework](https://github.com/MaaXYZ/MaaFramework) 强力驱动！
+![GitHub stars](https://img.shields.io/github/stars/gitlihang/Maa_MHXY_MG?style=flat-square)
+![GitHub release](https://img.shields.io/github/v/release/gitlihang/Maa_MHXY_MG?style=flat-square)
+![License](https://img.shields.io/github/license/gitlihang/Maa_MHXY_MG?style=flat-square)
+
+基于 MaaFramework 的《梦幻西游手游》自动化助手，结合图像识别与模拟控制，帮助完成高频日常与部分周常任务。
 
 </div>
 
-## 重点说明
-因69以下账号操作逻辑的不同，部分功能对69以下小号适配存在问题。
+## 目录
+- [项目简介](#项目简介)
+- [核心能力](#核心能力)
+- [快速开始](#快速开始)
+- [运行方式](#运行方式)
+- [功能列表](#功能列表)
+- [常见要求](#常见要求)
+- [相关文档](#相关文档)
+- [鸣谢](#鸣谢)
+- [免责声明](#免责声明)
+- [赞助与交流](#赞助与交流)
 
-## 功能介绍
-**20+功能**日常、周长<br>
-**[功能列表](./docs/功能列表.md)**
+## 项目简介
 
+`MAA_MHXY_MG` 是一个面向《梦幻西游手游》的自动化项目，依托 [MaaFramework](https://github.com/MaaXYZ/MaaFramework) 实现界面识别、流程编排与模拟操作。
 
-## 使用说明
-    
-1.**[窗口运行教程](./docs/窗口运行教程.md)** **推荐使用** **必看**
+项目适合已经在 PC 模拟器环境中游玩的用户，用来减少重复点击和日常任务的手动操作成本。
 
-2.**[cmd运行教程](./docs/CMD运行教程.md)**
+> 重点说明：由于 69 级以下账号操作逻辑不同，部分功能对低等级小号的适配仍存在限制。
+
+## 核心能力
+
+- 支持窗口界面运行，也支持命令行模式运行
+- 覆盖签到、师门、秘境、宝图、运镖、抓鬼等高频任务
+- 提供 AI 答题等扩展能力
+- 基于发布产物即可使用，不必从源码手动搭建完整环境
+
+## 快速开始
+
+### 1. 下载发布版本
+
+前往 [Releases](https://github.com/gitlihang/Maa_MHXY_MG/releases) 下载与你的系统和架构匹配的版本。
+
+### 2. 准备模拟器环境
+
+推荐使用 **MuMu 模拟器**，同时兼容雷电、蓝叠等主流模拟器。
+
+建议参数：
+
+- 分辨率：`1280 x 720`
+- DPI：`240`
+- 屏幕比例：`16:9`
+- 渲染模式：`DirectX`
+
+### 3. 完成系统依赖
+
+Windows 用户通常还需要安装：
+
+- [vc_redist](https://aka.ms/vs/17/release/vc_redist.x64.exe)
+- [.NET 10](https://dotnet.microsoft.com/zh-cn/download/dotnet/10.0)
+
+### 4. 启动并先做单任务测试
+
+首次使用建议先单独运行“帮派签到”等简单任务，确认连接与识别链路正常后，再逐步增加任务组合。
+
+## 运行方式
+
+### 窗口运行（推荐）
+
+推荐优先阅读：[窗口运行教程](./docs/窗口运行教程.md)
+
+通常流程是：
+
+1. 下载并解压发布包
+2. 在 GUI 中选择触控模式为 **MaaTouch**
+3. 连接模拟器
+4. 选择任务并启动
+
+### 命令行运行
+
+参考文档：[CMD 运行教程](./docs/CMD运行教程.md)
+
+命令行模式适合已经熟悉 ADB 地址、资源切换和任务编排的用户。
+
+## 功能列表
+
+已完成的代表性功能包括：
+
+- 福利签到
+- 帮派签到
+- 师门任务
+- 秘境任务
+- 宝图任务（获得 / 挖取）
+- 运镖任务
+- 整理背包
+- 三界奇缘
+- 科举乡试（AI 答题）
+- 抓鬼任务
+- 家园整理
+- 活力打工
+- 周长任务中的多项内容
+
+完整功能明细请查看：[功能列表](./docs/功能列表.md)
+
+## 常见要求
+
+- 电脑缩放建议保持 `100%`
+- 首次运行期间，不要在初始化尚未完成时提前停止任务
+- 如果是多开场景，可以通过创建实例的方式分别管理
+- 遇到路径、ADB 或模拟器兼容问题，优先对照教程文档逐项检查
+
+## 相关文档
+
+- [窗口运行教程](./docs/窗口运行教程.md)
+- [CMD 运行教程](./docs/CMD运行教程.md)
+- [功能列表](./docs/功能列表.md)
 
 ## 鸣谢
 
-本项目由以下相关库强力驱动！
-- **[MaaFramework](https://github.com/MaaXYZ/MaaFramework)**<br>
- 基于图像识别的自动化黑盒测试框架 
-- ~~**[MFAWPF](https://github.com/SweetSmellFox/MFAWPF)**~~ <br>
-~~本项目是一个基于WPF框架开发的用户界面，旨在提供类似于MaaPiCli的功能~~
-- **[MFAAvalonia](https://github.com/SweetSmellFox/MFAAvalonia)**<br>
-基于 Avalonia 的 MAAFramework 通用 GUI 项目
+本项目依赖以下相关项目：
 
-<!-- 感谢以下开发者对本项目作出的贡献:
-
-<a href="https://github.com/gitlihang/Maa_MHXY_MG/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=gitlihang/Maa_MHXY_MG&max=1000" />
-</a> -->
+- [MaaFramework](https://github.com/MaaXYZ/MaaFramework)
+- [MFAAvalonia](https://github.com/SweetSmellFox/MFAAvalonia)
 
 ## 免责声明
 
-本项目仅供学习参考
+本项目仅供学习与交流参考，请在理解风险与平台规则的前提下自行使用。
 
-<!-- ## ☕️ 支持项目 / Support the Project
+## 赞助与交流
 
-如果本项目对你有帮助，欢迎通过以下方式支持作者，让项目持续维护与更新。
-
-If this project is helpful to you, please consider supporting the author.
-
-### 支付宝 / 微信支付
-
-<img src="./docs/img/code/1775884404813.jpg" width="300" alt="Alipay" align="center">
-<img src="./docs/img/code/mm_facetoface_collect_qrcode_1775884589883.png" width="300" alt="WeChat Pay" align="center">
-
-### 💌 感谢支持
-你的每一份鼓励，都是项目前进的动力！
-Your support is the driving force behind the project. -->
-
-## 赞助
-
-<!-- markdownlint-disable MD045 -->
-<a href="https://afdian.com/a/gitlihang">
-  <img width="200" src="https://pic1.afdiancdn.com/static/img/welcome/button-sponsorme.png">
-</a>
-
-## 交流群
- - 交流反馈 QQ群：953819042
-
+- 爱发电：<https://afdian.com/a/gitlihang>
+- QQ 群：`953819042`
