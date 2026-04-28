@@ -11,7 +11,7 @@
 ![GitHub release](https://img.shields.io/github/v/release/gitlihang/Maa_MHXY_MG?style=flat-square)
 ![License](https://img.shields.io/github/license/gitlihang/Maa_MHXY_MG?style=flat-square)
 
-基于 MaaFramework 的《梦幻西游手游》自动化助手，结合图像识别与模拟控制，帮助完成高频日常与部分周常任务。
+基于 MaaFramework 的“梦手”自动化助手，结合图像识别与模拟控制，帮助完成高频日常与部分周常任务。
 
 </div>
 
@@ -28,7 +28,7 @@
 
 ## 项目简介
 
-`MAA_MHXY_MG` 是一个面向《梦幻西游手游》的自动化项目，依托 [MaaFramework](https://github.com/MaaXYZ/MaaFramework) 实现界面识别、流程编排与模拟操作。
+`MAA_MHXY_MG` 是一个面向“梦手”的自动化项目，依托 [MaaFramework](https://github.com/MaaXYZ/MaaFramework) 实现界面识别、流程编排与模拟操作。
 
 项目适合已经在 PC 模拟器环境中游玩的用户，用来减少重复点击和日常任务的手动操作成本。
 
