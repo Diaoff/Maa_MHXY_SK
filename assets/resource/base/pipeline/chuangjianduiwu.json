@@ -19,7 +19,7 @@
         ],
         "pre_delay": 500,
         "action": "ClickKey",
-        "post_delay": 2000,
+        "post_delay": 1000,
         "key": [
             57,
             48
@@ -55,7 +55,7 @@
                 ]
             }
         ],
-        "pre_delay": 1000,
+        "pre_delay": 500,
         "action": "Click",
         "post_delay": 1000
     },
@@ -86,7 +86,7 @@
             188,
             62
         ],
-        "pre_delay": 1000,
+        "pre_delay": 500,
         "action": "Click",
         "next": [
             "队伍-目标已设置",

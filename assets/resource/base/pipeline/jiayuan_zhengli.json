@@ -278,7 +278,7 @@
             96
         ],
         "action": "Click",
-        "post_delay": 1500
+        "post_delay": 500
     },
     "召唤灵点击喂养-未识别到确定": {
         "inverse": true,
@@ -292,7 +292,7 @@
             183,
             96
         ],
-        "pre_delay": 1500
+        "pre_delay": 500
     },
     "卧室-点击打理-过渡": {
         "pre_delay": 2000,
