@@ -126,7 +126,8 @@
         "template": [
             "qiandao/quwenjianshang1.png",
             "qiandao/quwenjianshang2.png",
-            "qiandao/quwenjianshang3.png"
+            "qiandao/quwenjianshang3.png",
+            "qiandao/quwenjianshang4.png"
         ],
         "roi": [
             316,
