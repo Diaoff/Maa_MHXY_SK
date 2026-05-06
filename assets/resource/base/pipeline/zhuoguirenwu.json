@@ -146,7 +146,6 @@
         ],
         "post_delay": 2000,
         "next": [
-            "[JumpBack]捉鬼-没有辅助提示-点击取消",
             "[JumpBack]展开-首页任务栏",
             "[JumpBack]任务栏切换为任务",
             "点击任务栏-捉鬼任务",
@@ -171,7 +170,9 @@
         "action": "Click",
         "post_delay": 2000,
         "next": [
+            "[JumpBack]抓鬼领取双倍弹窗",
             "[JumpBack]捉鬼-没有辅助提示-点击取消",
+            "[JumpBack]抓鬼不足五人-图片识别",
             "[JumpBack]展开-首页任务栏",
             "[JumpBack]任务栏切换为任务",
             "点击任务栏-捉鬼任务",
@@ -286,6 +287,77 @@
             "[JumpBack]展开-首页任务栏",
             "[JumpBack]捉鬼-下滑任务栏"
         ]
+    },
+    "捉鬼-领取任务失败-再次尝试领取-打开小地图": {
+        "max_hit": 1,
+        "pre_delay": 500,
+        "action": "ClickKey",
+        "key": [
+            61
+        ],
+        "post_delay": 1000,
+        "next": [
+            "捉鬼-领取任务失败-再次尝试领取-点击钟馗",
+            "[JumpBack]小地图-按键打开失败-点击小地图图标"
+        ]
+    },
+    "捉鬼-领取任务失败-再次尝试领取-点击钟馗": {
+        "recognition": "Or",
+        "any_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "zonghe/xiaoditu_CA.png"
+                ],
+                "roi": [
+                    114,
+                    69,
+                    1040,
+                    630
+                ]
+            },
+            {
+                "recognition": "OCR",
+                "expected": [
+                    "钟馗",
+                    "钟道",
+                    "钟",
+                    "道"
+                ],
+                "roi": [
+                    357,
+                    391,
+                    72,
+                    43
+                ]
+            }
+        ],
+        "pre_delay": 1000,
+        "action": "Click",
+        "post_delay": 3000,
+        "target": [
+            377,
+            403,
+            38,
+            19
+        ],
+        "next": [
+            "捉鬼-领取任务失败-再次尝试领取-点击捉鬼任务"
+        ]
+    },
+    "捉鬼-领取任务失败-再次尝试领取-点击捉鬼任务": {
+        "recognition": "OCR",
+        "expected": [
+            "捉鬼任务"
+        ],
+        "roi": [
+            925,
+            73,
+            312,
+            482
+        ],
+        "pre_delay": 500,
+        "action": "Click"
     },
     "点击任务栏-捉鬼任务": {
         "recognition": "OCR",
