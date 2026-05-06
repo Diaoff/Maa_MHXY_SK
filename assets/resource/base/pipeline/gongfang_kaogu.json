@@ -1,0 +1,465 @@
+{
+    "gongfang_kaogu": {
+        "next": [
+            "主界面-工坊考古-加号",
+            "主界面-工坊考古-乘号",
+            "[JumpBack]panduan_zhujiemian"
+        ]
+    },
+    "主界面-工坊考古-加号": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "zonghe/jiahao.png"
+        ],
+        "roi": [
+            1206,
+            637,
+            66,
+            57
+        ],
+        "pre_delay": 1000,
+        "action": "Click",
+        "post_delay": 1000,
+        "next": [
+            "工坊考古-打开技能界面"
+        ]
+    },
+    "主界面-工坊考古-乘号": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "zonghe/chenghao.png"
+        ],
+        "roi": [
+            1206,
+            637,
+            66,
+            57
+        ],
+        "next": [
+            "工坊考古-打开技能界面"
+        ]
+    },
+    "工坊考古-打开技能界面": {
+        "pre_wait_freezes": 500,
+        "action": "ClickKey",
+        "key": [
+            57,
+            47
+        ],
+        "post_delay": 500,
+        "next": [
+            "工坊考古-打开技能界面成功",
+            "[JumpBack]技能界面-按键打开失败-点击技能图标"
+        ]
+    },
+    "技能界面-按键打开失败-点击技能图标": {
+        "recognition": "Or",
+        "any_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "jineng/jineng.png"
+                ],
+                "roi": [
+                    1038,
+                    620,
+                    94,
+                    89
+                ]
+            },
+            {
+                "recognition": "OCR",
+                "expected": [
+                    "技能"
+                ],
+                "roi": [
+                    1051,
+                    676,
+                    67,
+                    33
+                ]
+            }
+        ],
+        "pre_delay": 500,
+        "action": "Click",
+        "post_delay": 1000
+    },
+    "工坊考古-打开技能界面成功": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "jineng/renwujineng.png",
+            "jineng/bangpaijineng.png",
+            "jineng/xiulianjineng.png",
+            "jineng/fuzhujineng.png"
+        ],
+        "roi": [
+            348,
+            0,
+            548,
+            104
+        ],
+        "next": [
+            "工坊考古-切换辅助技能界面"
+        ]
+    },
+    "工坊考古-切换辅助技能界面": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "jineng/fuzhu.png",
+            "jineng/fuzhu2.png"
+        ],
+        "roi": [
+            1108,
+            512,
+            83,
+            141
+        ],
+        "threshold": [
+            0.9
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "工坊考古-点击考古入口"
+        ]
+    },
+    "工坊考古-点击考古入口": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "jineng/kaogu_rukou.png"
+        ],
+        "roi": [
+            856,
+            165,
+            247,
+            238
+        ],
+        "threshold": [
+            0.9
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "工坊考古-进入主界面成功"
+        ]
+    },
+    "工坊考古-进入主界面成功": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "jineng/kaogu_ZJM.png"
+        ],
+        "roi": [
+            462,
+            0,
+            362,
+            118
+        ],
+        "threshold": [
+            0.9
+        ],
+        "next": [
+            "工坊考古-主界面-切换技能生产"
+        ]
+    },
+    "工坊考古-主界面-切换技能生产": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "jineng/jinengshengchan.png",
+            "jineng/jinengshengchan2.png"
+        ],
+        "roi": [
+            1101,
+            252,
+            96,
+            179
+        ],
+        "threshold": [
+            0.9
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "[JumpBack]工坊考古-主界面-切换二阶",
+            "[JumpBack]工坊考古-主界面-二阶点击加号",
+            "活力不足_停止考古",
+            "工坊考古-主界面-点击考古"
+        ]
+    },
+    "活力不足_停止考古": {
+        "recognition": "ColorMatch",
+        "roi": [
+            761,
+            559,
+            68,
+            28
+        ],
+        "upper": [
+            252,
+            156,
+            133
+        ],
+        "lower": [
+            186,
+            25,
+            10
+        ],
+        "count": 1500,
+        "next": [
+            "panduan_zhujiemian"
+        ]
+    },
+    "工坊考古-主界面-切换二阶": {
+        "max_hit": 3,
+        "recognition": "TemplateMatch",
+        "template": [
+            "jineng/gongfang_jiantou_zuo.png"
+        ],
+        "roi": [
+            153,
+            116,
+            40,
+            34
+        ],
+        "action": "Click",
+        "post_delay": 500
+    },
+    "工坊考古-主界面-二阶点击加号": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "jineng/gongfang_jiahao.png"
+        ],
+        "roi": [
+            692,
+            280,
+            110,
+            110
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "工坊考古-选择工具界面"
+        ]
+    },
+    "工坊考古-选择工具界面": {
+        "recognition": "OCR",
+        "expected": [
+            "选择工具"
+        ],
+        "roi": [
+            569,
+            136,
+            150,
+            48
+        ],
+        "pre_delay": 500,
+        "next": [
+            "工坊考古-工具-洛阳铲",
+            "[JumpBack]工坊考古-工具-购买洛阳铲"
+        ]
+    },
+    "工坊考古-工具-购买洛阳铲": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "jineng/kaogu_goumai.png"
+        ],
+        "roi": [
+            354,
+            179,
+            294,
+            393
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "工坊考古-工具-购买洛阳铲-点击购买",
+            "[JumpBack]工坊考古-工具-选择洛阳铲"
+        ]
+    },
+    "工坊考古-工具-选择洛阳铲": {
+        "recognition": "OCR",
+        "expected": [
+            "洛阳铲"
+        ],
+        "roi": [
+            153,
+            77,
+            607,
+            476
+        ],
+        "action": "Click",
+        "post_delay": 500
+    },
+    "工坊考古-工具-购买洛阳铲-点击购买": {
+        "recognition": "OCR",
+        "expected": [
+            "洛阳铲"
+        ],
+        "roi": [
+            887,
+            112,
+            106,
+            64
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "target": [
+            890,
+            592,
+            153,
+            57
+        ],
+        "next": [
+            "工坊考古-工具-购买洛阳铲-关闭杂货铺界面"
+        ]
+    },
+    "工坊考古-工具-购买洛阳铲-关闭杂货铺界面": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "jineng/zahuopu_guanbi.png"
+        ],
+        "roi": [
+            1104,
+            112,
+            98,
+            93
+        ],
+        "action": "Click",
+        "post_delay": 1000
+    },
+    "工坊考古-工具-洛阳铲": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "jineng/luoyangchan.png"
+        ],
+        "roi": [
+            351,
+            179,
+            304,
+            388
+        ],
+        "pre_delay": 500,
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "工坊考古-工具-洛阳铲-点击使用"
+        ]
+    },
+    "工坊考古-工具-洛阳铲-点击使用": {
+        "recognition": "OCR",
+        "expected": [
+            "洛阳铲"
+        ],
+        "roi": [
+            661,
+            203,
+            100,
+            51
+        ],
+        "pre_delay": 500,
+        "action": "Click",
+        "post_delay": 500,
+        "target": [
+            702,
+            510,
+            190,
+            46
+        ]
+    },
+    "工坊考古-主界面-点击考古": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "jineng/yixuan_luoyangchan.png"
+        ],
+        "roi": [
+            684,
+            270,
+            126,
+            120
+        ],
+        "green_mask": true,
+        "threshold": [
+            0.9
+        ],
+        "action": "Click",
+        "target": [
+            662,
+            607,
+            173,
+            46
+        ],
+        "post_wait_freezes": 500,
+        "next": [
+            "[JumpBack]工坊考古-洛阳铲挖掘",
+            "工坊考古-角色移动停止"
+        ]
+    },
+    "工坊考古-洛阳铲挖掘": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "jineng/luoyangchan.png"
+        ],
+        "roi": [
+            1030,
+            398,
+            126,
+            128
+        ],
+        "threshold": [
+            0.9
+        ],
+        "pre_delay": 500,
+        "next": [
+            "工坊考古-点击挖掘"
+        ]
+    },
+    "工坊考古-点击挖掘": {
+        "action": "Click",
+        "repeat": 12,
+        "repeat_wait_freezes": {
+            "time": 1000,
+            "threshold": 0.95,
+            "target": [
+                1032,
+                507,
+                240,
+                161
+            ]
+        },
+        "target": [
+            1044,
+            550,
+            101,
+            51
+        ]
+    },
+    "工坊考古-角色移动停止": {
+        "pre_wait_freezes": {
+            "time": 3000
+        },
+        "next": [
+            "考古一轮结束"
+        ]
+    },
+    "考古一轮结束": {
+        "inverse": true,
+        "recognition": "TemplateMatch",
+        "template": [
+            "jineng/luoyangchan.png"
+        ],
+        "roi": [
+            1030,
+            398,
+            126,
+            128
+        ],
+        "threshold": [
+            0.9
+        ]
+    },
+    "考古次数": {
+        "max_hit": 0,
+        "next": [
+            "gongfang_kaogu"
+        ]
+    }
+}

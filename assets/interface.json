@@ -239,6 +239,14 @@
         {
             "name": "五行修业",
             "entry": "wuxingxiuye"
+        },
+        {
+            "name": "工坊考古",
+            "entry": "gongfang_kaogu",
+            "option": [
+                "考古次数"
+            ],
+            "description": "工坊考古任务,挖掘洛阳铲,默认1轮"
         }
     ],
     "option": {
@@ -737,6 +745,21 @@
                     }
                 }
             ]
+        },
+        "考古次数": {
+            "type": "input",
+            "inputs": [
+                {
+                    "name": "考古几轮",
+                    "pipeline_type": "int",
+                    "default": "0"
+                }
+            ],
+            "pipeline_override": {
+                "考古次数": {
+                    "max_hit": "{考古几轮}"
+                }
+            }
         }
     },
     "preset": [
