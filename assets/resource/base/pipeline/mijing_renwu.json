@@ -140,11 +140,11 @@
         "action": "Click",
         "post_delay": 200,
         "next": [
-            "xuanze_mijing_moshi",
-            "jixutiaozhan"
+            "秘境降妖-选择模式",
+            "秘境降妖-海底秘境-继续挑战"
         ]
     },
-    "xuanze_mijing_moshi": {
+    "秘境降妖-选择模式": {
         "recognition": "TemplateMatch",
         "template": "mijing/mijing_moshi.png",
         "roi": [
@@ -154,10 +154,10 @@
             106
         ],
         "next": [
-            "海底秘境-点击海底秘境"
+            "秘境降妖-选择海底秘境"
         ]
     },
-    "海底秘境-点击海底秘境": {
+    "秘境降妖-选择海底秘境": {
         "recognition": "OCR",
         "expected": [
             "进入"
@@ -170,10 +170,10 @@
         ],
         "action": "Click",
         "next": [
-            "click_haidimijing_queding"
+            "秘境降妖-海底秘境模式-确认"
         ]
     },
-    "click_haidimijing_queding": {
+    "秘境降妖-海底秘境模式-确认": {
         "recognition": "TemplateMatch",
         "template": "mijing/moshi_queding.png",
         "roi": [
@@ -184,11 +184,11 @@
         ],
         "action": "Click",
         "next": [
-            "jixutiaozhan",
+            "秘境降妖-海底秘境-继续挑战",
             "[JumpBack]清理主界面使用-关闭"
         ]
     },
-    "jixutiaozhan": {
+    "秘境降妖-海底秘境-继续挑战": {
         "recognition": "OCR",
         "expected": [
             "挑战"
@@ -199,11 +199,11 @@
             78,
             179
         ],
-        "post_delay": 200,
         "action": "Click",
+        "post_delay": 200,
         "next": [
             "[JumpBack]秘境-点击进入战斗",
-            "[JumpBack]mijing_zhandou",
+            "[JumpBack]海底秘境-点击关卡",
             "mijing_tongguan",
             "mijing_shibai",
             "[JumpBack]战斗中-等待20秒"
@@ -212,13 +212,28 @@
     "kk": {
         "next": [
             "[JumpBack]秘境-点击进入战斗",
-            "[JumpBack]mijing_zhandou",
+            "[JumpBack]海底秘境-点击关卡",
             "mijing_tongguan",
             "mijing_shibai",
             "[JumpBack]战斗中-等待20秒"
         ]
     },
-    "mijing_zhandou": {
+    "海底秘境-指定关卡结束任务": {
+        "recognition": "OCR",
+        "expected": [],
+        "roi": [
+            1014,
+            209,
+            101,
+            109
+        ],
+        "next": [
+            "[JumpBack]清理主界面使用-关闭",
+            "秘境-点击离开",
+            "[JumpBack]panduan_zhujiemian"
+        ]
+    },
+    "海底秘境-点击关卡": {
         "recognition": "OCR",
         "expected": [
             "第\\d*关"
