@@ -752,7 +752,7 @@
                 {
                     "name": "考古几轮",
                     "pipeline_type": "int",
-                    "default": "0"
+                    "default": "1"
                 }
             ],
             "pipeline_override": {
