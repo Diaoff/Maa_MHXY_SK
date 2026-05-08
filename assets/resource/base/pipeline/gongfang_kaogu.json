@@ -257,7 +257,7 @@
             150,
             48
         ],
-        "pre_delay": 500,
+        "pre_delay": 1000,
         "next": [
             "工坊考古-工具-洛阳铲",
             "[JumpBack]工坊考古-工具-购买洛阳铲"
@@ -335,7 +335,8 @@
     "工坊考古-工具-洛阳铲": {
         "recognition": "TemplateMatch",
         "template": [
-            "jineng/luoyangchan.png"
+            "jineng/luoyangchan.png",
+            "jineng/luoyangchan2.png"
         ],
         "roi": [
             351,
@@ -417,9 +418,9 @@
     },
     "工坊考古-点击挖掘": {
         "action": "Click",
-        "repeat": 12,
+        "repeat": 10,
         "repeat_wait_freezes": {
-            "time": 1000,
+            "time": 2000,
             "threshold": 0.95,
             "target": [
                 1032,
