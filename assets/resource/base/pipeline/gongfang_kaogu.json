@@ -269,12 +269,18 @@
             "jineng/kaogu_goumai.png"
         ],
         "roi": [
-            354,
-            179,
-            294,
-            393
+            337,
+            173,
+            322,
+            148
         ],
         "action": "Click",
+        "target": [
+            381,
+            216,
+            59,
+            62
+        ],
         "post_delay": 500,
         "next": [
             "工坊考古-工具-购买洛阳铲-点击购买",
@@ -282,6 +288,7 @@
         ]
     },
     "工坊考古-工具-选择洛阳铲": {
+        "max_hit": 5,
         "recognition": "OCR",
         "expected": [
             "洛阳铲"
@@ -330,7 +337,7 @@
             93
         ],
         "action": "Click",
-        "post_delay": 1000
+        "post_delay": 1500
     },
     "工坊考古-工具-洛阳铲": {
         "recognition": "TemplateMatch",
@@ -373,6 +380,9 @@
         ]
     },
     "工坊考古-界面-点击考古": {
+        "focus": {
+            "Node.Action.Succeeded": "开始考古挖掘"
+        },
         "recognition": "TemplateMatch",
         "template": [
             "jineng/yixuan_luoyangchan.png"
@@ -437,8 +447,29 @@
         ],
         "post_wait_freezes": 3000,
         "next": [
+            "[JumpBack]关闭临时包裹",
             "考古一轮结束",
             "[JumpBack]工坊考古-洛阳铲-单次挖掘"
+        ]
+    },
+    "关闭临时包裹": {
+        "recognition": "OCR",
+        "expected": [
+            "临时道具栏"
+        ],
+        "roi": [
+            541,
+            174,
+            201,
+            40
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "target": [
+            845,
+            152,
+            41,
+            42
         ]
     },
     "工坊考古-洛阳铲-单次挖掘": {
@@ -464,6 +495,9 @@
         "post_wait_freezes": 1000
     },
     "考古一轮结束": {
+        "focus": {
+            "Node.Recognition.Succeeded": "考古一轮结束"
+        },
         "inverse": true,
         "recognition": "TemplateMatch",
         "template": [
@@ -478,6 +512,217 @@
         "threshold": [
             0.9
         ],
+        "next": [
+            "古董售卖"
+        ]
+    },
+    "古董售卖": {
+        "focus": {
+            "Node.Recognition.Succeeded": "开始古董售卖"
+        },
+        "next": [
+            "古董售卖-过渡",
+            "[JumpBack]panduan_zhujiemian"
+        ]
+    },
+    "古董售卖-过渡": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "zonghe/chenghao.png",
+            "zonghe/jiahao.png"
+        ],
+        "roi": [
+            1206,
+            637,
+            66,
+            57
+        ],
+        "pre_delay": 500,
+        "action": "ClickKey",
+        "key": [
+            57,
+            33
+        ],
+        "post_delay": 1000,
+        "next": [
+            "古董售卖-打开背包成功-向上滑动到顶端",
+            "[JumpBack]背包界面-按键打开失败-点击图标"
+        ]
+    },
+    "古董售卖-打开背包成功-向上滑动到顶端": {
+        "recognition": "TemplateMatch",
+        "template": "beibao/beibao_jiemian_panduan.png",
+        "roi": [
+            335,
+            5,
+            577,
+            68
+        ],
+        "action": "MultiSwipe",
+        "swipes": [
+            {
+                "starting": 0,
+                "begin": [
+                    907,
+                    220,
+                    1,
+                    1
+                ],
+                "end": [
+                    908,
+                    447,
+                    1,
+                    1
+                ],
+                "duration": 200
+            },
+            {
+                "starting": 1000,
+                "begin": [
+                    907,
+                    220,
+                    1,
+                    1
+                ],
+                "end": [
+                    908,
+                    447,
+                    1,
+                    1
+                ],
+                "duration": 200
+            },
+            {
+                "starting": 2000,
+                "begin": [
+                    907,
+                    220,
+                    1,
+                    1
+                ],
+                "end": [
+                    908,
+                    447,
+                    1,
+                    1
+                ],
+                "duration": 200
+            }
+        ],
+        "post_delay": 1000,
+        "next": [
+            "古董售卖-点击整理"
+        ]
+    },
+    "古董售卖-点击整理": {
+        "recognition": "OCR",
+        "expected": [
+            "整理"
+        ],
+        "roi": [
+            873,
+            609,
+            241,
+            77
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "古董售卖-点击古董",
+            "[JumpBack]背包向上滑动10次"
+        ]
+    },
+    "古董售卖-点击古董": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "jineng/gd"
+        ],
+        "green_mask": true,
+        "pre_delay": 500,
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "古董售卖-古董-点击使用"
+        ]
+    },
+    "古董售卖-古董-点击使用": {
+        "recognition": "OCR",
+        "expected": [
+            "使用"
+        ],
+        "roi": [
+            413,
+            296,
+            177,
+            337
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "[JumpBack]自动寻路中-图片识别",
+            "古董售卖-界面"
+        ]
+    },
+    "古董售卖-界面": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "jineng/gudongshoumai.png"
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "target": [
+            169,
+            153,
+            63,
+            63
+        ],
+        "next": [
+            "古董售卖-售卖完成",
+            "[JumpBack]古董售卖-界面-点击售卖"
+        ]
+    },
+    "古董售卖-界面-点击售卖": {
+        "action": "Click",
+        "post_delay": 500,
+        "target": [
+            890,
+            592,
+            150,
+            58
+        ]
+    },
+    "古董售卖-售卖完成": {
+        "focus": {
+            "Node.Recognition.Succeeded": "古董售卖完成"
+        },
+        "recognition": "TemplateMatch",
+        "template": [
+            "jineng/shoumai_wancheng.png",
+            "jineng/shoumai_wancheng2.png"
+        ],
+        "roi": [
+            766,
+            66,
+            368,
+            382
+        ],
+        "next": [
+            "古董售卖-返回主界面"
+        ]
+    },
+    "古董售卖-返回主界面": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "jineng/zahuopu_guanbi.png"
+        ],
+        "roi": [
+            1099,
+            105,
+            105,
+            108
+        ],
+        "action": "Click",
+        "post_delay": 500,
         "next": [
             "考古次数"
         ]
