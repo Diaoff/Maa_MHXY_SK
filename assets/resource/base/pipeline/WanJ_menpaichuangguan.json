@@ -258,7 +258,7 @@
             238,
             325
         ],
-        "pre_delay": 1000,
+        "pre_delay": 500,
         "action": "Click",
         "post_delay": 2000,
         "next": [
@@ -278,8 +278,8 @@
             238,
             325
         ],
-        "pre_delay": 1000,
-        "action": "Click"
+        "action": "Click",
+        "post_delay": 500
     },
     "门派-点击进入战斗": {
         "recognition": "OCR",
@@ -292,9 +292,16 @@
             338,
             155
         ],
-        "pre_delay": 1000,
+        "pre_delay": 500,
         "action": "Click",
-        "post_delay": 500
+        "post_delay": 500,
+        "next": [
+            "门派-次数统计"
+        ]
+    },
+    "门派-次数统计": {
+        "action": "Custom",
+        "custom_action": "input_node_success_num"
     },
     "门派一轮完成-领取任务": {
         "recognition": "OCR",
@@ -346,17 +353,26 @@
         "post_delay": 1000
     },
     "门派闯关结束": {
+        "focus": {
+            "Node.Recognition.Succeeded": "门派闯关结束,门派活动战斗次数如下："
+        },
         "recognition": "OCR",
         "expected": [
-            "活动还没有开始，活动将在21：00准时开启",
-            "门派闯关已经结束了"
+            "21:40",
+            "21:41",
+            "21:42",
+            "21:43",
+            "21:44",
+            "21:45"
         ],
         "roi": [
-            358,
-            599,
-            640,
-            71
+            79,
+            0,
+            57,
+            29
         ],
+        "action": "Custom",
+        "custom_action": "output_node_success_num",
         "next": [
             "panduan_zhujiemian"
         ]
