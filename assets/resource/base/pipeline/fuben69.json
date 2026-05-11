@@ -270,6 +270,9 @@
         "post_delay": 1000
     },
     "进入50级侠士副本-成功": {
+        "focus": {
+            "Node.Recognition.Succeeded": "进入50级侠士副本成功"
+        },
         "recognition": "OCR",
         "expected": "因缘绘",
         "roi": [
@@ -303,6 +306,9 @@
         ]
     },
     "50侠士-副本完成-退出": {
+        "focus": {
+            "Node.Recognition.Succeeded": "50侠士副本完成"
+        },
         "recognition": "OCR",
         "expected": [
             "副本已完成"
@@ -539,6 +545,9 @@
         ]
     },
     "进入50级普通副本-1": {
+        "focus": {
+            "Node.Recognition.Succeeded": "进入50级普通副本-1成功"
+        },
         "recognition": "OCR",
         "expected": [
             "进入"
@@ -562,6 +571,9 @@
         ]
     },
     "50普通-1-副本完成-退出": {
+        "focus": {
+            "Node.Action.Succeeded": "50普通-1-副本完成"
+        },
         "recognition": "OCR",
         "expected": [
             "副本已完成"
@@ -666,6 +678,9 @@
         ]
     },
     "进入50级普通副本-2": {
+        "focus": {
+            "Node.Action.Succeeded": "进入50级普通副本-2成功"
+        },
         "recognition": "OCR",
         "expected": [
             "进入"
@@ -701,6 +716,9 @@
         ]
     },
     "50普通-2-副本完成-退出": {
+        "focus": {
+            "Node.Action.Succeeded": "50普通-2-副本完成"
+        },
         "recognition": "OCR",
         "expected": [
             "副本已完成"
@@ -979,6 +997,9 @@
         "post_delay": 1500
     },
     "日常抓鬼-钟馗-捉鬼任务-开始": {
+        "focus": {
+            "Node.Recognition.Succeeded": "日常抓鬼任务第一轮-开始"
+        },
         "recognition": "OCR",
         "expected": [
             "捉鬼[(（]\\d*/\\d*[)）]",
@@ -1019,6 +1040,9 @@
         "action": "Click"
     },
     "日常抓鬼-第一轮结束-图片识别": {
+        "focus": {
+            "Node.Recognition.Succeeded": "日常抓鬼第一轮结束-图片识别"
+        },
         "recognition": "TemplateMatch",
         "template": [
             "zhuagui/zhuaguijiesu.png",
@@ -1036,6 +1060,9 @@
         ]
     },
     "日常抓鬼-第一轮结束-文字识别": {
+        "focus": {
+            "Node.Recognition.Succeeded": "日常抓鬼第一轮结束-文字识别"
+        },
         "recognition": "OCR",
         "expected": [
             "少侠已经捉完1轮鬼，是否继续捉鬼？"
@@ -1086,6 +1113,9 @@
         ]
     },
     "日常抓鬼-第二轮-抓鬼任务-开始": {
+        "focus": {
+            "Node.Recognition.Succeeded": "日常抓鬼任务第二轮-开始"
+        },
         "recognition": "OCR",
         "expected": [
             "捉鬼[(（]\\d*.\\d*[)）]",
@@ -1109,6 +1139,9 @@
         ]
     },
     "日常抓鬼-第二轮-抓鬼任务-结束": {
+        "focus": {
+            "Node.Recognition.Succeeded": "日常抓鬼任务第二轮-结束"
+        },
         "recognition": "TemplateMatch",
         "template": [
             "zhuagui/zhuaguijiesu.png",

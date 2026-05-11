@@ -337,6 +337,9 @@
         "post_delay": 1000
     },
     "115进入70级侠士副本-成功": {
+        "focus": {
+            "Node.Recognition.Succeeded": "进入70级侠士副本成功，开始70级侠士副本"
+        },
         "recognition": "OCR",
         "expected": "因缘绘",
         "roi": [
@@ -358,6 +361,9 @@
         ]
     },
     "115-70级副本完成-退出": {
+        "focus": {
+            "Node.Action.Succeeded": "70级侠士副本完成"
+        },
         "recognition": "OCR",
         "expected": [
             "副本已完成"
@@ -479,6 +485,9 @@
         ]
     },
     "115进入50级侠士副本(第二次进入)": {
+        "focus": {
+            "Node.Action.Succeeded": "进入50级侠士副本成功，开始50级侠士副本"
+        },
         "recognition": "OCR",
         "expected": [
             "进入"
@@ -503,6 +512,9 @@
         ]
     },
     "115-50侠士-副本完成-退出": {
+        "focus": {
+            "Node.Action.Succeeded": "50级侠士副本完成"
+        },
         "recognition": "OCR",
         "expected": [
             "副本已完成"
@@ -607,6 +619,9 @@
         ]
     },
     "115进入50级普通副本-1": {
+        "focus": {
+            "Node.Action.Succeeded": "进入50级普通副本1成功，开始50级普通副本1"
+        },
         "recognition": "OCR",
         "expected": [
             "进入"
@@ -631,6 +646,9 @@
         ]
     },
     "115-50普通-1-副本完成-退出": {
+        "focus": {
+            "Node.Action.Succeeded": "50级普通副本1完成"
+        },
         "recognition": "OCR",
         "expected": [
             "副本已完成"
@@ -735,6 +753,9 @@
         ]
     },
     "115进入50级普通副本-2": {
+        "focus": {
+            "Node.Action.Succeeded": "进入50级普通副本2成功，开始50级普通副本2"
+        },
         "recognition": "OCR",
         "expected": [
             "进入"
@@ -758,6 +779,9 @@
         ]
     },
     "115-50普通-2-副本完成-退出": {
+        "focus": {
+            "Node.Action.Succeeded": "50级普通副本2完成"
+        },
         "recognition": "OCR",
         "expected": [
             "副本已完成"
@@ -862,6 +886,9 @@
         ]
     },
     "115进入50级普通副本-3": {
+        "focus": {
+            "Node.Action.Succeeded": "进入70级普通副本成功，开始70级普通副本"
+        },
         "recognition": "OCR",
         "expected": [
             "进入"
@@ -885,6 +912,9 @@
         ]
     },
     "115-50普通-3-副本完成-退出": {
+        "focus": {
+            "Node.Action.Succeeded": "70级普通副本完成"
+        },
         "recognition": "OCR",
         "expected": [
             "副本已完成"
