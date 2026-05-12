@@ -220,6 +220,9 @@
         ]
     },
     "海底秘境-指定关卡结束任务": {
+        "focus": {
+            "Node.Recognition.Succeeded": "{name}"
+        },
         "recognition": "OCR",
         "expected": [],
         "roi": [
@@ -371,6 +374,9 @@
         ]
     },
     "日月之井-指定关卡结束任务": {
+        "focus": {
+            "Node.Recognition.Succeeded": "{name}"
+        },
         "recognition": "OCR",
         "expected": [],
         "roi": [
