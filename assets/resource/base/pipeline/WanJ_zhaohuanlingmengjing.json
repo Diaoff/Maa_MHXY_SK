@@ -296,11 +296,21 @@
             315,
             137
         ],
-        "pre_delay": 1000,
+        "pre_delay": 500,
         "action": "Click",
-        "post_delay": 1000
+        "post_delay": 500,
+        "next": [
+            "召唤灵梦境-次数统计"
+        ]
+    },
+    "召唤灵梦境-次数统计": {
+        "action": "Custom",
+        "custom_action": "input_node_success_num"
     },
     "唤灵梦境-结束": {
+        "focus": {
+            "Node.Recognition.Succeeded": "召唤灵梦境结束,召唤灵梦境活动战斗次数如下："
+        },
         "recognition": "OCR",
         "expected": "长安城",
         "roi": [
@@ -309,6 +319,8 @@
             132,
             48
         ],
+        "action": "Custom",
+        "custom_action": "output_node_success_num",
         "next": [
             "panduan_zhujiemian"
         ]
