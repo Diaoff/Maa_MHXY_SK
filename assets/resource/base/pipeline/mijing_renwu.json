@@ -202,6 +202,7 @@
         "action": "Click",
         "post_delay": 200,
         "next": [
+            "海底秘境-指定关卡结束任务",
             "[JumpBack]秘境-点击进入战斗",
             "[JumpBack]海底秘境-点击关卡",
             "mijing_tongguan",
