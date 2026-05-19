@@ -68,7 +68,8 @@
         "recognition": "TemplateMatch",
         "template": [
             "shangcheng/baitan_zhujiemian.png",
-            "shangcheng/baitan_zhujiemian2.png"
+            "shangcheng/baitan_zhujiemian2.png",
+            "shangcheng/baitan_zhujiemian3.png"
         ],
         "roi": [
             435,
