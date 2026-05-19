@@ -17,10 +17,8 @@
 
 ## 目录
 - [项目简介](#项目简介)
-- [快速开始](./docs/zh_cn/快速开始.md)
-- [运行方式](./docs/zh_cn/运行方式.md)
 - [功能列表](#功能列表)
-- [详细教程文档](#详细教程文档)
+- [教程文档](#教程文档) 
 - [鸣谢](#鸣谢)
 - [免责声明](#免责声明)
 - [沟通交流](#沟通交流)
@@ -28,7 +26,7 @@
 
 ## 项目简介
 
-`MAA_MHXY_MG` 是一个面向“梦手”的自动化项目，依托 [MaaFramework](https://github.com/MaaXYZ/MaaFramework) 实现界面识别、流程编排与模拟操作。
+`MAA_MHXY_MG` 是一个面向“梦手”的项目，依托 [MaaFramework](https://github.com/MaaXYZ/MaaFramework) 实现。
 
 项目适合已经在 PC 模拟器环境中游玩的用户，用来减少重复点击和日常任务的手动操作成本。
 
@@ -43,7 +41,7 @@
 
 完整功能明细请查看：[功能列表](./docs/功能列表.md)
 
-## 详细教程文档
+## 教程文档
 
 - [窗口运行教程](./docs/窗口运行教程.md)
 - [CMD 运行教程](./docs/CMD运行教程.md)
@@ -57,9 +55,10 @@
 - [MFAAvalonia](https://github.com/SweetSmellFox/MFAAvalonia)
 - [MXU](https://github.com/MistEO/MXU)
 
+
 ## 免责声明
 
-本项目仅供学习与交流参考，请在理解风险与平台规则的前提下自行使用。
+本项目仅供学习与交流参考。
 
 ## 沟通交流
 
