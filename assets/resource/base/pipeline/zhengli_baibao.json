@@ -145,6 +145,22 @@
             1
         ]
     },
+    "背包向上滑动20次": {
+        "max_hit": 20,
+        "action": "Swipe",
+        "begin": [
+            907,
+            462,
+            1,
+            1
+        ],
+        "end": [
+            907,
+            363,
+            1,
+            1
+        ]
+    },
     "使用红罗羹": {
         "enabled": false,
         "recognition": "TemplateMatch",
