@@ -32,7 +32,8 @@
     "打开队伍界面成功": {
         "recognition": "TemplateMatch",
         "template": [
-            "duiwu/duiwu-jiemian.png"
+            "duiwu/duiwu-zudui.png",
+            "duiwu/duiwu-duiwu.png"
         ],
         "roi": [
             283,
@@ -52,10 +53,10 @@
             "创建队伍"
         ],
         "roi": [
-            123,
-            616,
-            216,
-            103
+            85,
+            632,
+            188,
+            60
         ],
         "next": [
             "panduan_zhujiemian"

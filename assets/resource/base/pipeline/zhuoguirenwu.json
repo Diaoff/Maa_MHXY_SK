@@ -517,13 +517,13 @@
     "捉鬼-进入组队界面成功": {
         "recognition": "TemplateMatch",
         "template": [
-            "duiwu/duiwu-jiemian.png"
+            "duiwu/duiwu-duiwu.png"
         ],
         "roi": [
-            361,
-            2,
-            532,
-            67
+            0,
+            0,
+            229,
+            106
         ],
         "threshold": 0.9,
         "next": [
@@ -539,9 +539,9 @@
         ],
         "roi": [
             341,
-            433,
-            749,
-            40
+            432,
+            757,
+            41
         ],
         "action": "Click",
         "post_delay": 1000,
@@ -570,9 +570,9 @@
         "recognition": "OCR",
         "expected": "自动匹配",
         "roi": [
-            955,
-            84,
-            156,
+            1024,
+            57,
+            152,
             60
         ],
         "pre_delay": 1000,
@@ -601,9 +601,9 @@
         "recognition": "OCR",
         "expected": "自动匹配",
         "roi": [
-            955,
-            84,
-            156,
+            1024,
+            57,
+            152,
             60
         ],
         "pre_delay": 1000,
@@ -618,9 +618,9 @@
         "recognition": "OCR",
         "expected": "自动匹配",
         "roi": [
-            955,
-            84,
-            156,
+            1024,
+            57,
+            152,
             60
         ],
         "next": [
@@ -631,10 +631,10 @@
         "recognition": "TemplateMatch",
         "template": "duiwu/duiwu-guanbi.png",
         "roi": [
-            1070,
-            12,
-            66,
-            59
+            1153,
+            0,
+            100,
+            98
         ],
         "pre_delay": 1000,
         "action": "Click",

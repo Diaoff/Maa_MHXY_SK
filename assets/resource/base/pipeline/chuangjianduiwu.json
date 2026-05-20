@@ -62,17 +62,18 @@
     "队伍-进入主界面": {
         "recognition": "TemplateMatch",
         "template": [
-            "duiwu/duiwu-jiemian.png",
-            "duiwu/duiwu-jiemian2.png"
+            "duiwu/duiwu-zudui.png",
+            "duiwu/duiwu-duiwu.png"
         ],
         "roi": [
-            375,
-            5,
-            506,
-            65
+            0,
+            0,
+            229,
+            106
         ],
         "next": [
-            "队伍-点击创建队伍"
+            "队伍-点击创建队伍",
+            "队伍-已创建队伍"
         ]
     },
     "队伍-点击创建队伍": {
@@ -81,13 +82,29 @@
             "创建队伍"
         ],
         "roi": [
-            148,
-            628,
+            85,
+            632,
             188,
-            62
+            60
         ],
         "pre_delay": 500,
         "action": "Click",
+        "next": [
+            "队伍-目标已设置",
+            "[JumpBack]队伍-设置目标"
+        ]
+    },
+    "队伍-已创建队伍": {
+        "recognition": "OCR",
+        "expected": [
+            "退出队伍"
+        ],
+        "roi": [
+            85,
+            632,
+            188,
+            60
+        ],
         "next": [
             "队伍-目标已设置",
             "[JumpBack]队伍-设置目标"
@@ -99,10 +116,10 @@
             "duiwu/duiwu-mubiao.png"
         ],
         "roi": [
-            826,
-            89,
-            53,
-            49
+            761,
+            52,
+            69,
+            69
         ],
         "pre_delay": 1000,
         "action": "Click",
@@ -323,10 +340,10 @@
         "recognition": "OCR",
         "expected": "^(?!无$)[\u4e00-\u9fa5]+$",
         "roi": [
-            478,
-            89,
-            180,
-            52
+            430,
+            64,
+            170,
+            48
         ],
         "next": [
             "队伍-人员已满",
@@ -338,9 +355,9 @@
         "recognition": "OCR",
         "expected": "自动匹配",
         "roi": [
-            955,
-            84,
-            156,
+            1024,
+            57,
+            152,
             60
         ],
         "pre_delay": 1000,
@@ -353,6 +370,12 @@
             "键喊话",
             "一键喊话"
         ],
+        "roi": [
+            998,
+            634,
+            178,
+            55
+        ],
         "pre_delay": 500,
         "action": "Click",
         "post_delay": 1000,
@@ -364,8 +387,8 @@
         "recognition": "OCR",
         "expected": "当前频道",
         "roi": [
-            927,
-            299,
+            1003,
+            302,
             171,
             319
         ],
@@ -391,10 +414,10 @@
             "盘丝洞"
         ],
         "roi": [
-            957,
+            1028,
             540,
-            120,
-            53
+            102,
+            42
         ],
         "next": [
             "队伍-人员已满-且未有暂离/离线",
@@ -454,10 +477,10 @@
             "duiwu/duiwu-guanbi.png"
         ],
         "roi": [
-            1070,
-            12,
-            66,
-            59
+            1153,
+            0,
+            100,
+            98
         ],
         "pre_delay": 1000,
         "action": "Click",

@@ -752,14 +752,14 @@
     "打开队伍界面成功_退出队伍": {
         "recognition": "TemplateMatch",
         "template": [
-            "duiwu/duiwu-jiemian.png",
-            "duiwu/duiwu-jiemian2.png"
+            "duiwu/duiwu-zudui.png",
+            "duiwu/duiwu-duiwu.png"
         ],
         "roi": [
-            375,
-            5,
-            506,
-            65
+            0,
+            0,
+            229,
+            106
         ],
         "next": [
             "点击退出队伍",
@@ -772,10 +772,10 @@
             "创建队伍"
         ],
         "roi": [
-            140,
-            620,
-            190,
-            65
+            85,
+            632,
+            188,
+            60
         ],
         "pre_delay": 1000,
         "next": [
@@ -788,12 +788,13 @@
             "退出队伍"
         ],
         "roi": [
-            123,
-            616,
-            216,
-            103
+            85,
+            632,
+            188,
+            60
         ],
         "action": "Click",
+        "post_delay": 500,
         "next": [
             "panduan_zhujiemian"
         ]
