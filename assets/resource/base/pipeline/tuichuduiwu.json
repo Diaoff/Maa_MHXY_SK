@@ -36,10 +36,10 @@
             "duiwu/duiwu-duiwu.png"
         ],
         "roi": [
-            283,
             0,
-            724,
-            93
+            0,
+            229,
+            106
         ],
         "pre_delay": 500,
         "next": [
