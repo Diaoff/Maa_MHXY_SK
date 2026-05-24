@@ -163,7 +163,7 @@
             103,
             159
         ],
-        "pre_wait_freezes": 100000
+        "pre_delay": 100000
     },
     "战斗中-等待50秒": {
         "recognition": "TemplateMatch",
@@ -177,7 +177,7 @@
             103,
             159
         ],
-        "pre_wait_freezes": 50000
+        "pre_delay": 50000
     },
     "战斗中-等待20秒": {
         "recognition": "TemplateMatch",
