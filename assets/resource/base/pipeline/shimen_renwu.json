@@ -120,8 +120,8 @@
             "[JumpBack]关闭X9联赛弹窗",
             "[JumpBack]跳过剧情动画-快进键",
             "[JumpBack]关闭三界热点",
-            "[JumpBack]issub_sleep2",
-            "[JumpBack]师门任务-单次点击"
+            "[JumpBack]师门任务-单次点击",
+            "[JumpBack]issub_sleep2"
         ]
     },
     "师门任务-单次点击": {
