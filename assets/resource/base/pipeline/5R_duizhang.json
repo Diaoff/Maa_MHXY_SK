@@ -1,0 +1,120 @@
+{
+    "5R_duizhang": {
+        "next": [
+            "队长过渡",
+            "[JumpBack]panduan_zhujiemian"
+        ]
+    },
+    "队长过渡": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "zonghe/chenghao.png",
+            "zonghe/jiahao.png"
+        ],
+        "roi": [
+            1206,
+            637,
+            66,
+            57
+        ],
+        "pre_delay": 500,
+        "action": "ClickKey",
+        "key": [
+            57,
+            34
+        ],
+        "next": [
+            "邀请队员-打开好友界面成功",
+            "[JumpBack]好友界面-按键打开失败-点击好友图标"
+        ]
+    },
+    "好友界面-按键打开失败-点击好友图标": {},
+    "邀请队员-打开好友界面成功": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "r5/haoyou.png"
+        ],
+        "roi": [
+            352,
+            0,
+            543,
+            103
+        ],
+        "post_delay": 1000,
+        "next": [
+            "邀请队员-切换联系人"
+        ]
+    },
+    "邀请队员-切换联系人": {
+        "recognition": "OCR",
+        "expected": [
+            "联系人"
+        ],
+        "roi": [
+            362,
+            89,
+            92,
+            50
+        ],
+        "pre_delay": 500,
+        "action": "Click",
+        "next": [
+            "邀请队员-向下滑动"
+        ]
+    },
+    "邀请队员-向下滑动": {
+        "action": "Swipe",
+        "begin": [
+            366,
+            220
+        ],
+        "end": [
+            369,
+            364
+        ],
+        "post_delay": 500,
+        "next": [
+            "邀请队员-点击搜索"
+        ]
+    },
+    "邀请队员-agent": {
+        "recognition": "Custom",
+        "custom_recognition": "invite"
+    },
+    "邀请队员-点击搜索": {
+        "recognition": "OCR",
+        "expected": [
+            "搜索"
+        ],
+        "roi": [
+            336,
+            224,
+            64,
+            38
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "邀请队员-输入队员名称"
+        ]
+    },
+    "邀请队员-输入队员名称": {
+        "action": "InputText",
+        "input_text": "",
+        "next": [
+            "邀请队员-输入队员名称-确认"
+        ]
+    },
+    "邀请队员-输入队员名称-确认": {
+        "recognition": "OCR",
+        "expected": "确定",
+        "roi": [
+            1208,
+            0,
+            67,
+            65
+        ],
+        "pre_delay": 500,
+        "action": "Click"
+    }
+}
