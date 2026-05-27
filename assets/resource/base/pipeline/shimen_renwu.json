@@ -92,8 +92,9 @@
             "[JumpBack]战斗平衡弹窗-点击关闭",
             "[JumpBack]关闭X9联赛弹窗",
             "[JumpBack]跳过剧情动画-快进键",
-            "[JumpBack]issub_sleep2",
-            "[JumpBack]师门任务-单次点击"
+            "[JumpBack]issub_sleep-10分钟",
+            "[JumpBack]师门任务-单次点击",
+            "[JumpBack]issub_sleep-无限"
         ]
     },
     "师门-点击去完成": {
@@ -120,11 +121,13 @@
             "[JumpBack]关闭X9联赛弹窗",
             "[JumpBack]跳过剧情动画-快进键",
             "[JumpBack]关闭三界热点",
+            "[JumpBack]issub_sleep-10分钟",
             "[JumpBack]师门任务-单次点击",
-            "[JumpBack]issub_sleep2"
+            "[JumpBack]issub_sleep-无限"
         ]
     },
     "师门任务-单次点击": {
+        "max_hit": 1,
         "pre_delay": 500,
         "recognition": "OCR",
         "expected": [
@@ -201,8 +204,11 @@
             "panduan_zhujiemian"
         ]
     },
-    "issub_sleep2": {
-        "pre_delay": 2000,
-        "post_wait_freezes": 5000
+    "issub_sleep-10分钟": {
+        "max_hit": 60,
+        "pre_delay": 10000
+    },
+    "issub_sleep-无限": {
+        "pre_delay": 10000
     }
 }
