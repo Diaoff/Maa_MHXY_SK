@@ -244,9 +244,10 @@
             "name": "工坊考古",
             "entry": "gongfang_kaogu",
             "option": [
-                "考古次数"
+                "考古次数",
+                "是否售卖真品"
             ],
-            "description": "工坊考古任务,挖掘洛阳铲,默认1轮，每轮结束后会自动售卖古董"
+            "description": "./docs/description/gongfang_kaogu.md"
         },
         {
             "name": "队员挂机",
@@ -832,6 +833,29 @@
                     "max_hit": "{考古几轮}"
                 }
             }
+        },
+        "是否售卖真品": {
+            "type": "switch",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "pipeline_override": {
+                        "古董售卖-界面": {}
+                    }
+                },
+                {
+                    "name": "No",
+                    "pipeline_override": {
+                        "古董售卖-界面": {
+                            "next": [
+                                "古董售卖-售卖完成",
+                                "古董售卖-界面-非真品售卖完成",
+                                "[JumpBack]古董售卖-界面-点击售卖"
+                            ]
+                        }
+                    }
+                }
+            ]
         }
     },
     "preset": [

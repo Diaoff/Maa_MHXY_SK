@@ -745,6 +745,23 @@
             58
         ]
     },
+    "古董售卖-界面-非真品售卖完成": {
+        "recognition": "OCR",
+        "expected": [
+            "取消"
+        ],
+        "roi": [
+            464,
+            420,
+            142,
+            51
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "古董售卖-返回主界面"
+        ]
+    },
     "古董售卖-售卖完成": {
         "focus": {
             "Node.Recognition.Succeeded": "古董售卖完成"
