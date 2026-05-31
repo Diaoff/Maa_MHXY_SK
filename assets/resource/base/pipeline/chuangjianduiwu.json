@@ -546,11 +546,11 @@
         "count": 700,
         "next": [
             "队伍-捉鬼任务-最低20级",
-            "[JumpBack]等级（左）-向下滑动-max10"
+            "[JumpBack]等级（左）-向下滑动-max20"
         ]
     },
-    "等级（左）-向下滑动-max10": {
-        "max_hit": 10,
+    "等级（左）-向下滑动-max20": {
+        "max_hit": 20,
         "action": "Swipe",
         "begin": [
             800,
