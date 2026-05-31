@@ -146,7 +146,7 @@
         ]
     },
     "背包向上滑动20次": {
-        "max_hit": 20,
+        "max_hit": 50,
         "action": "Swipe",
         "begin": [
             907,

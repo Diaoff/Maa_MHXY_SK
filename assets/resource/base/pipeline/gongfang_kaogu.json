@@ -746,6 +746,9 @@
         ]
     },
     "古董售卖-界面-非真品售卖完成": {
+        "focus": {
+            "Node.Recognition.Succeeded": "非真品售卖完成"
+        },
         "recognition": "OCR",
         "expected": [
             "取消"
