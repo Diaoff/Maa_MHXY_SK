@@ -258,6 +258,10 @@
             "name": "队长踢人",
             "entry": "5R_duizhang_TR",
             "description": "踢出全部队员并退出队伍"
+        },
+        {
+            "name": "1",
+            "entry": "5R_duizhang"
         }
     ],
     "option": {
@@ -856,6 +860,45 @@
                     }
                 }
             ]
+        },
+        "邀请队员": {
+            "type": "input",
+            "inputs": [
+                {
+                    "name": "队员1",
+                    "pipeline_type": "string",
+                    "default": ""
+                },
+                {
+                    "name": "队员2",
+                    "pipeline_type": "string",
+                    "default": ""
+                },
+                {
+                    "name": "队员3",
+                    "pipeline_type": "string",
+                    "default": ""
+                },
+                {
+                    "name": "队员4",
+                    "pipeline_type": "string",
+                    "default": ""
+                }
+            ],
+            "pipeline_override": {
+                "邀请队员-输入队员名称1": {
+                    "input_text": "{队员1}"
+                },
+                "邀请队员-输入队员名称2": {
+                    "input_text": "{队员2}"
+                },
+                "邀请队员-输入队员名称3": {
+                    "input_text": "{队员3}"
+                },
+                "邀请队员-输入队员名称4": {
+                    "input_text": "{队员4}"
+                }
+            }
         }
     },
     "preset": [

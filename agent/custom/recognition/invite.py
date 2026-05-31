@@ -35,7 +35,11 @@ class invite(CustomRecognition):
         box = [0,0,0,0]
         for res in reco_result.all_results:
             box = res.box
+        center_x = box[0] + box[2] // 2
+        center_y = box[1] + box[3] // 2 
+        context.tasker.controller.post_click(center_x, center_y).wait()
         
+
 
        
         return CustomRecognition.AnalyzeResult(box=(0,0,0,0),detail="活跃度小于50,任务结束")
