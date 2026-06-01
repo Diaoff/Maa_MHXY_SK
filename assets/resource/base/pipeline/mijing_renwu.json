@@ -268,6 +268,9 @@
         "action": "Click"
     },
     "mijing_tongguan": {
+        "focus": {
+            "Node.Recognition.Succeeded": "秘境正常通关"
+        },
         "recognition": "OCR",
         "expected": [
             "通关"
@@ -283,6 +286,9 @@
         ]
     },
     "mijing_shibai": {
+        "focus": {
+            "Node.Recognition.Succeeded": "秘境战斗失败，提前退出秘境任务。"
+        },
         "recognition": "TemplateMatch",
         "template": "mijing/mijing_shibai.png",
         "roi": [
@@ -410,6 +416,9 @@
         ]
     },
     "日月之井-通关": {
+        "focus": {
+            "Node.Recognition.Succeeded": "日月之井正常通关"
+        },
         "recognition": "OCR",
         "expected": [
             "通关"
@@ -427,6 +436,9 @@
         ]
     },
     "日月之井-失败": {
+        "focus": {
+            "Node.Recognition.Succeeded": "日月之井战斗失败，提前退出日月之井任务。"
+        },
         "recognition": "TemplateMatch",
         "template": [
             "mijing/mijing_shibai.png",
