@@ -261,7 +261,10 @@
         },
         {
             "name": "1",
-            "entry": "5R_duizhang"
+            "entry": "5R_duizhang",
+            "option": [
+                "邀请队员"
+            ]
         }
     ],
     "option": {

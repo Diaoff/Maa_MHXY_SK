@@ -91,7 +91,23 @@
         "pre_delay": 500,
         "action": "Click",
         "next": [
-            "[JumpBack]邀请队员-向下滑动"
+            "[JumpBack]邀请队员-向下滑动",
+            "邀请队员完成"
+        ]
+    },
+    "邀请队员完成": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "r5/yaoqing_wancheng.png"
+        ],
+        "roi": [
+            147,
+            87,
+            415,
+            160
+        ],
+        "next": [
+            "panduan_zhujiemian"
         ]
     },
     "邀请队员-向下滑动": {
@@ -226,6 +242,7 @@
             285,
             401
         ],
+        "pre_delay": 500,
         "action": "Click",
         "post_delay": 500,
         "next": [
@@ -244,7 +261,13 @@
             81
         ],
         "pre_delay": 500,
-        "action": "Click"
+        "action": "Click",
+        "target_offset": [
+            0,
+            0,
+            -3,
+            -3
+        ]
     },
     "邀请队员-队员已经在队伍中": {
         "focus": {
