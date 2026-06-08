@@ -260,6 +260,11 @@
             "description": "踢出全部队员并退出队伍"
         },
         {
+            "name": "特殊助战",
+            "entry": "TS_zhuzhan",
+            "description": "伽蓝助战，每日聊天"
+        },
+        {
             "name": "1",
             "entry": "5R_duizhang",
             "option": [
