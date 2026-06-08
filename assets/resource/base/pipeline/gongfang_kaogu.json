@@ -677,13 +677,52 @@
         "template": [
             "jineng/gd"
         ],
+        "roi": [
+            616,
+            139,
+            493,
+            514
+        ],
         "green_mask": true,
         "pre_delay": 500,
         "action": "Click",
         "post_delay": 500,
         "next": [
-            "古董售卖-古董-点击使用"
+            "古董售卖-古董-点击使用",
+            "[JumpBack]古董售卖-点击古董失败"
         ]
+    },
+    "古董售卖-点击古董失败": {
+        "inverse": true,
+        "recognition": "OCR",
+        "expected": [
+            "使用"
+        ],
+        "roi": [
+            413,
+            296,
+            177,
+            337
+        ],
+        "next": [
+            "古董售卖-点击古董失败-再次点击古董"
+        ]
+    },
+    "古董售卖-点击古董失败-再次点击古董": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "jineng/gd"
+        ],
+        "roi": [
+            616,
+            139,
+            493,
+            514
+        ],
+        "green_mask": true,
+        "pre_delay": 500,
+        "action": "Click",
+        "post_delay": 500
     },
     "古董售卖-古董-点击使用": {
         "recognition": "OCR",
