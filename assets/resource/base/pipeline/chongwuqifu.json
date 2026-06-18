@@ -128,7 +128,7 @@
             79
         ],
         "threshold": [
-            0.9
+            0.85
         ],
         "pre_delay": 500,
         "action": "Click",
@@ -314,6 +314,12 @@
             "qifu/duihao1.png",
             "qifu/duihao2.png"
         ],
+        "roi": [
+            339,
+            75,
+            620,
+            546
+        ],
         "threshold": [
             0.9
         ],
@@ -327,7 +333,28 @@
         ],
         "post_delay": 2500,
         "next": [
+            "宠物祈福完成-满99领取内丹",
             "宠物祈福完成"
+        ]
+    },
+    "宠物祈福完成-满99领取内丹": {
+        "focus": {
+            "Node.Action.Succeeded": "获得宠物专属内丹"
+        },
+        "recognition": "OCR",
+        "expected": [
+            "领取"
+        ],
+        "roi": [
+            979,
+            441,
+            108,
+            62
+        ],
+        "pre_delay": 500,
+        "action": "Click",
+        "next": [
+            "panduan_zhujiemian"
         ]
     },
     "宠物祈福完成": {
