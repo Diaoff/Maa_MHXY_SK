@@ -246,7 +246,7 @@
             52
         ],
         "action": "Click",
-        "post_delay": 200,
+        "post_delay": 1000,
         "next": [
             "进入50级侠士副本-成功",
             "[JumpBack]115进入侠士副本-等待队员同意",
@@ -559,6 +559,7 @@
             49
         ],
         "action": "Click",
+        "post_delay": 800,
         "next": [
             "50普通-1-副本完成-退出",
             "[JumpBack]点击副本-跳过剧情动画",
@@ -692,6 +693,7 @@
             51
         ],
         "action": "Click",
+        "post_delay": 800,
         "next": [
             "50普通-2-副本完成-退出",
             "[JumpBack]点击副本-跳过剧情动画",
@@ -1089,7 +1091,7 @@
             475,
             214
         ],
-        "pre_delay": 2000,
+        "pre_delay": 500,
         "action": "Click",
         "post_delay": 4000,
         "next": [
@@ -1109,7 +1111,7 @@
             482
         ],
         "action": "Click",
-        "post_delay": 4000,
+        "post_delay": 1000,
         "next": [
             "日常抓鬼-第二轮-抓鬼任务-开始"
         ]
