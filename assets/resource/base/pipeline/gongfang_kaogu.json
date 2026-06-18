@@ -444,6 +444,7 @@
             173,
             46
         ],
+        "post_delay": 500,
         "post_wait_freezes": 500,
         "next": [
             "工坊考古-洛阳铲挖掘"
