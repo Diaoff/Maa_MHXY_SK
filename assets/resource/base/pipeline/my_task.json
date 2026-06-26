@@ -354,5 +354,20 @@
             "return_text": "输出的描述"
         },
         "next": []
+    },
+    "关闭整点活动弹窗": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "zonghe/renwu_tanchuang.png"
+        ],
+        "roi": [
+            846,
+            394,
+            80,
+            83
+        ],
+        "pre_delay": 500,
+        "action": "Click",
+        "post_delay": 500
     }
 }
