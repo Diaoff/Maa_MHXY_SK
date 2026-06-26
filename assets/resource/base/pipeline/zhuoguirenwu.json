@@ -214,7 +214,7 @@
             35
         ],
         "count": 950,
-        "pre_delay": 1500,
+        "pre_delay": 1000,
         "action": "Click",
         "target": [
             1044,
@@ -222,7 +222,7 @@
             101,
             50
         ],
-        "post_delay": 1500
+        "post_delay": 1000
     },
     "捉鬼-下滑任务栏": {
         "max_hit": 4,
