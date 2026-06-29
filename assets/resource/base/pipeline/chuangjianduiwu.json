@@ -482,7 +482,7 @@
             100,
             98
         ],
-        "pre_delay": 1000,
+        "pre_delay": 500,
         "action": "Click",
         "post_delay": 1000
     },
