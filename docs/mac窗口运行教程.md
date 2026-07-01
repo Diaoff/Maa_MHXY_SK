@@ -20,11 +20,11 @@
 >     
 >     ```shell
 >     cd /usr/local/bin/Maa_MHXY_MG
->     ./MaaPiCli
+>     ./Maa_MHXY_MG
 >     ```
 >     
 > 
-> 若想使用**图形操作页面**请按第二步操作，由执行 `MaaPiCli` 改为执行 `Maa_MHXY_MG` 程序。
+> 若想使用**图形操作页面**请按第二步操作，执行 `Maa_MHXY_MG` 程序。
 > 
 > ⚠️Gatekeeper 安全提示处理：
 > 
@@ -32,13 +32,13 @@
 > 如果遇到"无法打开，因为无法验证开发者"等错误，请选择以下任一方案:
 > 
 > ```shell
-> # 方案1：以 MaaPiCli 为例，移除隔离属性（推荐，以实际路径为准）
-> sudo xattr -rd com.apple.quarantine /usr/local/bin/Maa_MHXY_MG/MaaPiCli
-> # 或用户目录版本：xattr -rd com.apple.quarantine ~/Maa_MHXY_MG/MaaPiCli
+> # 方案1：以 Maa_MHXY_MG 为例，移除隔离属性（推荐，以实际路径为准）
+> sudo xattr -rd com.apple.quarantine /usr/local/bin/Maa_MHXY_MG/Maa_MHXY_MG
+> # 或用户目录版本：xattr -rd com.apple.quarantine ~/Maa_MHXY_MG/Maa_MHXY_MG
 > 
 > # 方案2：添加到 Gatekeeper 白名单
-> sudo spctl --add /usr/local/bin/Maa_MHXY_MG/MaaPiCli
-> # 或用户目录版本：spctl --add ~/Maa_MHXY_MG/MaaPiCli
+> sudo spctl --add /usr/local/bin/Maa_MHXY_MG/Maa_MHXY_MG
+> # 或用户目录版本：spctl --add ~/Maa_MHXY_MG/Maa_MHXY_MG
 > 
 > # 方案3：一次性处理整个目录
 > sudo xattr -rd com.apple.quarantine /usr/local/bin/Maa_MHXY_MG/*
