@@ -14,10 +14,12 @@ import difflib
 # file_path = os.path.abspath(file_path)
 # log_file_path = r"agent\custom\recognition\search_log.txt"
 # log_file_path = os.path.abspath(log_file_path)
-# 获取当前 .py 文件所在的目录
-base_dir = os.path.dirname(os.path.abspath(__file__))
-file_path = os.path.join(base_dir, "agent", "custom", "recognition", "tiku.txt")
-log_file_path = os.path.join(base_dir, "agent", "custom", "recognition", "search_log.txt")
+
+# 生产环境路径，兼容win和mac
+file_path = os.path.join("agent", "custom", "recognition", "tiku.txt")
+file_path = os.path.abspath(file_path)
+log_file_path = os.path.join("agent", "custom", "recognition", "search_log.txt")
+log_file_path = os.path.abspath(log_file_path)
 
 def load_question_bank(file_path):
     """
