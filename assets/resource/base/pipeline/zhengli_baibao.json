@@ -383,10 +383,10 @@
             479,
             479
         ],
+        "pre_delay": 500,
         "action": "Click",
-        "next": [
-            "使用过期物品-使用"
-        ]
+        "repeat": 2,
+        "repeat_delay": 135
     },
     "使用过期物品-使用": {
         "recognition": "OCR",
