@@ -207,10 +207,10 @@
         "recognition": "TemplateMatch",
         "template": "jiayuan/weikaiqi.png",
         "roi": [
-            279,
-            545,
-            178,
-            79
+            277,
+            430,
+            183,
+            81
         ],
         "next": [
             "卧室-点击打理",
@@ -221,10 +221,10 @@
         "recognition": "TemplateMatch",
         "template": "jiayuan/shiyongjiaju.png",
         "roi": [
-            279,
-            545,
-            178,
-            79
+            277,
+            430,
+            183,
+            81
         ],
         "action": "Click",
         "next": [
@@ -370,10 +370,10 @@
         "recognition": "TemplateMatch",
         "template": "jiayuan/weikaiqi.png",
         "roi": [
-            477,
-            552,
-            154,
-            56
+            465,
+            430,
+            171,
+            78
         ],
         "action": "ClickKey",
         "key": [
@@ -387,10 +387,10 @@
         "recognition": "TemplateMatch",
         "template": "jiayuan/shiyongjiaju.png",
         "roi": [
-            477,
-            552,
-            154,
-            56
+            465,
+            430,
+            171,
+            78
         ],
         "action": "Click",
         "post_delay": 7000,
