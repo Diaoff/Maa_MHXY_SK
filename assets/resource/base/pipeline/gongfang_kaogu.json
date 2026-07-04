@@ -46,7 +46,7 @@
         ]
     },
     "工坊考古-打开技能界面": {
-        "pre_wait_freezes": 500,
+        "pre_delay": 500,
         "action": "ClickKey",
         "key": [
             57,
