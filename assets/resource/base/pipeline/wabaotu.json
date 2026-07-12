@@ -196,6 +196,7 @@
             63
         ],
         "action": "Click",
+        "rate_limit": 2000,
         "next": [
             "[JumpBack]藏宝图-主界面使用",
             "[JumpBack]战斗中-等待100秒",
