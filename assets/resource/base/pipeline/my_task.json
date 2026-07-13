@@ -85,9 +85,38 @@
     },
     "panduan_zhujiemian": {
         "next": [
+            "[JumpBack]amazing_discount",
             "[JumpBack]panduan_zhujiemian_ks",
             "zai_zhujiemian"
         ]
+    },
+    "amazing_discount": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "zonghe/amazing_discount.png"
+        ],
+        "roi": [
+            233,
+            40,
+            846,
+            324
+        ],
+        "next": [
+            "amazing_discount_close"
+        ]
+    },
+    "amazing_discount_close": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "zonghe/amazing_discount_close.png"
+        ],
+        "roi": [
+            947,
+            61,
+            120,
+            127
+        ],
+        "action": "Click"
     },
     "zai_zhujiemian": {
         "pre_delay": 1000

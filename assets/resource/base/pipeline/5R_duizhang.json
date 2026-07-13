@@ -131,15 +131,32 @@
         "custom_recognition": "invite"
     },
     "邀请队员-点击搜索": {
-        "recognition": "OCR",
-        "expected": [
-            "搜索"
-        ],
-        "roi": [
-            336,
-            224,
-            64,
-            38
+        "recognition": "Or",
+        "any_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "r5/search_button.png"
+                ],
+                "roi": [
+                    153,
+                    209,
+                    408,
+                    64
+                ]
+            },
+            {
+                "recognition": "OCR",
+                "expected": [
+                    "搜索"
+                ],
+                "roi": [
+                    153,
+                    209,
+                    408,
+                    64
+                ]
+            }
         ],
         "action": "Click",
         "post_delay": 500,

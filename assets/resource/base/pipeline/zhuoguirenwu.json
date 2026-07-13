@@ -186,9 +186,9 @@
             "zonghe/rwl_suojin2.png"
         ],
         "roi": [
-            1219,
+            1200,
             114,
-            59,
+            79,
             62
         ],
         "pre_delay": 200,
