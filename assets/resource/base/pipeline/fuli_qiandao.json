@@ -16,10 +16,32 @@
             72,
             65
         ],
-        "action": "Click",
+        "pre_wait_freezes": 1,
+        "action": "ClickKey",
+        "key": [
+            57,
+            32
+        ],
+        "post_delay": 1000,
         "next": [
-            "dakaiguaguale"
+            "dakaiguaguale",
+            "[JumpBack]福利界面-按键失败-点击福利图标"
         ]
+    },
+    "福利界面-按键失败-点击福利图标": {
+        "recognition": "OCR",
+        "expected": [
+            "福利"
+        ],
+        "roi": [
+            1,
+            112,
+            72,
+            65
+        ],
+        "pre_delay": 500,
+        "action": "Click",
+        "post_delay": 1000
     },
     "dakaiguaguale": {
         "recognition": "OCR",

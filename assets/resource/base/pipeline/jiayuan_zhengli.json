@@ -49,11 +49,30 @@
             46
         ],
         "pre_delay": 1000,
-        "action": "Click",
+        "pre_wait_freezes": 1,
+        "action": "ClickKey",
+        "key": [
+            57,
+            42
+        ],
         "post_delay": 1000,
         "next": [
-            "点击回家"
+            "点击回家",
+            "[JumpBack]家园界面-按键失败-点击家园图标"
         ]
+    },
+    "家园界面-按键失败-点击家园图标": {
+        "recognition": "TemplateMatch",
+        "template": "jiayuan/jiayuan.png",
+        "roi": [
+            977,
+            640,
+            60,
+            46
+        ],
+        "pre_delay": 500,
+        "action": "Click",
+        "post_delay": 1000
     },
     "点击回家": {
         "recognition": "OCR",

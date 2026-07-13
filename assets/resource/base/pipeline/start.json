@@ -9,6 +9,7 @@
         "package": "com.netease.myq",
         "post_delay": 20000,
         "next": [
+            "主界面",
             "点击登录游戏",
             "[JumpBack]正在下载本周更新",
             "[JumpBack]登录等待10秒"
