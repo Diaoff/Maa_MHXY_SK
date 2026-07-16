@@ -4,7 +4,7 @@
     "license": "LICENSE",
     "name": "Maa_MHXY_MG",
     "github": "https://github.com/gitlihang/Maa_MHXY_MG",
-    "description": "欢迎使用Maa_MHXY_MG,新用户请先查阅文档及各个任务的说明（有的任务有说明），请查看齿轮中的选项设置后选择适合自己的，最后免责声明：本项目仅供学习交流使用，请勿用于商业用途，使用本项目即代表您同意免责声明。",
+    "description": "欢迎使用Maa_MHXY_SK（时空版）,本作面向《梦幻西游：时空》PC 原生客户端（Win32 控制器），使用 MAA 官方 UI 选窗连接。新用户请先查阅文档及各个任务的说明（有的任务有说明），请查看齿轮中的选项设置后选择适合自己的，最后免责声明：本项目仅供学习交流使用，请勿用于商业用途，使用本项目即代表您同意免责声明。",
     "mirrorchyan_rid": "Maa_MHXY_MG",
     "mirrorchyan_multiplatform": true,
     "controller": [
@@ -18,6 +18,12 @@
             "label": "PlayCover",
             "type": "PlayCover",
             "description": "部分任务存在兼容问题，不建议使用"
+        },
+        {
+            "name": "Win32",
+            "label": "时空版客户端(PC)",
+            "type": "Win32",
+            "description": "《梦幻西游：时空》PC 原生窗口，按进程名 MyGame_x64r.exe 过滤连接"
         }
     ],
     "agent": {
@@ -28,6 +34,25 @@
         ]
     },
     "resource": [
+        {
+            "name": "时空版-官方重标定",
+            "path": [
+                "./resource/base"
+            ],
+            "controller": [
+                "Win32"
+            ]
+        },
+        {
+            "name": "时空版-用户标定覆盖",
+            "path": [
+                "./resource/user"
+            ],
+            "controller": [
+                "Win32"
+            ],
+            "description": "标定工具生成的覆盖资源，按节点名覆盖官方重标定层（后加载覆盖先加载）"
+        },
         {
             "name": "官方混服",
             "path": [

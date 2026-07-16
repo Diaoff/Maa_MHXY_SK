@@ -10,29 +10,30 @@ from maa.event_sink import NotificationType
 
 from utils.logger import logger
 
-# 目标宽高比：16:9
-TARGET_RATIO = 16.0 / 9.0
+# 时空版为竖屏 PC 客户端：同时支持 横屏 16:9 与 竖屏 9:16
+# （从 Maa_MHXY_MG 横屏手游模拟器 fork 而来，原仅允许 16:9 横屏）
+TARGET_RATIOS = (16.0 / 9.0, 9.0 / 16.0)
 # 容差范围（±2%）
 TOLERANCE = 0.02
 
 
-def is_aspect_ratio_16x9(width: int, height: int) -> bool:
+def is_supported_aspect_ratio(width: int, height: int) -> bool:
     """
-    检查给定的尺寸是否为横屏（宽 > 高）且宽高比约为 16:9
-    竖屏（9:16）或正方形将直接返回 False
+    检查给定尺寸是否为受支持的宽高比（横屏 16:9 或 竖屏 9:16）。
+    方向无关：竖屏 9:16（宽 < 高）也视为合法。
     """
     if width <= 0 or height <= 0:
         return False
 
-    # 必须是横屏
-    if width <= height:
-        return False
-
-    # 计算横屏下的宽高比
     ratio = width / float(height)
-
-    # 检查比例是否在 16:9 的容差范围内
-    return abs(ratio - TARGET_RATIO) <= TARGET_RATIO * TOLERANCE
+    # 实际比例可能是某个目标比例本身（横屏）或其倒数（竖屏）
+    for target in TARGET_RATIOS:
+        if abs(ratio - target) <= target * TOLERANCE:
+            return True
+        inv = 1.0 / target
+        if abs(ratio - inv) <= inv * TOLERANCE:
+            return True
+    return False
 
 
 def calculate_aspect_ratio(width: int, height: int) -> float:
@@ -97,21 +98,16 @@ class AspectRatioChecker(TaskerEventSink):
 
         logger.debug(f"截图尺寸: {width} x {height}")
 
-        # 检查宽高比（仅横屏 16:9）
-        if not is_aspect_ratio_16x9(width, height):
+        # 检查宽高比（横屏 16:9 或 竖屏 9:16 均可）
+        if not is_supported_aspect_ratio(width, height):
             actual_ratio = calculate_aspect_ratio(width, height)
-            if width <= height:
-                logger.error(
-                    f"🚨 当前设备为竖屏或正方形模式 ({width}x{height})，Maa_MHXY_MG 仅支持横屏 16:9 比例，请旋转模拟器或调整分辨率。"
-                )
-            else:
-                logger.error(
-                    f"🚨 分辨率比例不匹配！任务已停止。"
-                    f"当前: {width}x{height} (比例: {actual_ratio:.4f})，"
-                    f"Maa_MHXY_MG 仅支持 16:9 比例，请调整为: 2560x1440, 1920x1080, 1600x900, 1280x720(推荐)"
-                )
-
+            logger.error(
+                f"🚨 分辨率比例不匹配！任务已停止。"
+                f"当前: {width}x{height} (比例: {actual_ratio:.4f})，"
+                f"仅支持 16:9 横屏 或 9:16 竖屏，请调整分辨率。"
+            )
             # 停止任务
             tasker.post_stop()
         else:
-            logger.debug(f"分辨率检查通过: {width}x{height} (16:9 横屏)")
+            orient = "竖屏 9:16" if width < height else "横屏 16:9"
+            logger.debug(f"分辨率检查通过: {width}x{height} ({orient})")
