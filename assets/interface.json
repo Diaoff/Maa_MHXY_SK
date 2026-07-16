@@ -2,10 +2,10 @@
     "interface_version": 2,
     "contact": "CONTACT",
     "license": "LICENSE",
-    "name": "Maa_MHXY_MG",
-    "github": "https://github.com/gitlihang/Maa_MHXY_MG",
+    "name": "MAA_MHXY_SK",
+    "github": "https://github.com/Diaoff/MAA_MHXY_SK",
     "description": "欢迎使用Maa_MHXY_SK（时空版）,本作面向《梦幻西游：时空》PC 原生客户端（Win32 控制器），使用 MAA 官方 UI 选窗连接。新用户请先查阅文档及各个任务的说明（有的任务有说明），请查看齿轮中的选项设置后选择适合自己的，最后免责声明：本项目仅供学习交流使用，请勿用于商业用途，使用本项目即代表您同意免责声明。",
-    "mirrorchyan_rid": "Maa_MHXY_MG",
+    "mirrorchyan_rid": "MAA_MHXY_SK",
     "mirrorchyan_multiplatform": true,
     "controller": [
         {

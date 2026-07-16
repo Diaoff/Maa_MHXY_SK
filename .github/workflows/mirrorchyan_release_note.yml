@@ -13,9 +13,9 @@ jobs:
       - id: uploading
         uses: MirrorChyan/release-note-action@v1
         with:
-          mirrorchyan_rid: Maa_MHXY_MG
+          mirrorchyan_rid: MAA_MHXY_SK
 
-          owner: gitlihang
-          repo: Maa_MHXY_MG
+          owner: Diaoff
+          repo: Maa_MHXY_SK
           upload_token: ${{ secrets.MirrorChyanUploadToken }}
           github_token: ${{ secrets.GITHUB_TOKEN }}

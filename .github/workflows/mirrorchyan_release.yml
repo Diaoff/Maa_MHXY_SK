@@ -19,11 +19,11 @@ jobs:
         uses: MirrorChyan/uploading-action@v1
         with:
           filetype: latest-release
-          filename: "Maa_MHXY_MG-${{ matrix.os }}-${{ matrix.arch }}-*"
-          mirrorchyan_rid: Maa_MHXY_MG
+          filename: "MAA_MHXY_SK-${{ matrix.os }}-${{ matrix.arch }}-*"
+          mirrorchyan_rid: MAA_MHXY_SK
 
-          owner: gitlihang
-          repo: Maa_MHXY_MG
+          owner: Diaoff
+          repo: Maa_MHXY_SK
           github_token: ${{ secrets.GITHUB_TOKEN }}
           upload_token: ${{ secrets.MirrorChyanUploadToken }}
           os: ${{ matrix.os }}

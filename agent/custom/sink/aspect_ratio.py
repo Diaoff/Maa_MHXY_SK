@@ -11,7 +11,7 @@ from maa.event_sink import NotificationType
 from utils.logger import logger
 
 # 时空版为竖屏 PC 客户端：同时支持 横屏 16:9 与 竖屏 9:16
-# （从 Maa_MHXY_MG 横屏手游模拟器 fork 而来，原仅允许 16:9 横屏）
+# （从 MAA_MHXY_SK 横屏手游模拟器 fork 而来，原仅允许 16:9 横屏）
 TARGET_RATIOS = (16.0 / 9.0, 9.0 / 16.0)
 # 容差范围（±2%）
 TOLERANCE = 0.02
