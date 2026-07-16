@@ -1,0 +1,278 @@
+{
+    "fuli_qiandao": {
+        "next": [
+            "fuli_qiandao-ocr",
+            "[JumpBack]panduan_zhujiemian"
+        ]
+    },
+    "fuli_qiandao-ocr": {
+        "recognition": "OCR",
+        "expected": [
+            "福利"
+        ],
+        "roi": [
+            0,
+            0,
+            500,
+            900
+        ],
+        "pre_wait_freezes": 1,
+        "action": "Click",
+        "post_delay": 1000,
+        "next": [
+            "dakaiguaguale",
+            "[JumpBack]panduan_zhujiemian"
+        ]
+    },
+    "福利界面-按键失败-点击福利图标": {
+        "recognition": "OCR",
+        "expected": [
+            "福利"
+        ],
+        "roi": [
+            0,
+            0,
+            500,
+            900
+        ],
+        "pre_delay": 500,
+        "action": "Click",
+        "post_delay": 1000
+    },
+    "dakaiguaguale": {
+        "recognition": "OCR",
+        "expected": [
+            "打开刮刮乐"
+        ],
+        "roi": [
+            0,
+            0,
+            500,
+            900
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "next": [
+            "qiandaohuadong"
+        ]
+    },
+    "qiandaohuadong": {
+        "max_hit": 2,
+        "action": "Swipe",
+        "begin": [
+            70,
+            430,
+            1,
+            1
+        ],
+        "end": [
+            430,
+            430,
+            1,
+            1
+        ],
+        "duration": 500,
+        "next": [
+            "qiandaohuadong2"
+        ]
+    },
+    "qiandaohuadong2": {
+        "max_hit": 2,
+        "action": "Swipe",
+        "begin": [
+            70,
+            445,
+            1,
+            1
+        ],
+        "end": [
+            430,
+            445,
+            1,
+            1
+        ],
+        "duration": 500,
+        "next": [
+            "qiandaohuadong3"
+        ]
+    },
+    "qiandaohuadong3": {
+        "max_hit": 2,
+        "action": "Swipe",
+        "begin": [
+            70,
+            460,
+            1,
+            1
+        ],
+        "end": [
+            430,
+            460,
+            1,
+            1
+        ],
+        "duration": 500,
+        "next": [
+            "qiandaohuadong4"
+        ]
+    },
+    "qiandaohuadong4": {
+        "max_hit": 2,
+        "action": "Swipe",
+        "begin": [
+            70,
+            430,
+            1,
+            1
+        ],
+        "end": [
+            430,
+            430,
+            1,
+            1
+        ],
+        "duration": 500,
+        "next": [
+            "qiandaohuadong5"
+        ]
+    },
+    "qiandaohuadong5": {
+        "max_hit": 2,
+        "action": "Swipe",
+        "begin": [
+            70,
+            445,
+            1,
+            1
+        ],
+        "end": [
+            430,
+            445,
+            1,
+            1
+        ],
+        "duration": 500,
+        "next": [
+            "qiandaohuadong6"
+        ]
+    },
+    "qiandaohuadong6": {
+        "max_hit": 2,
+        "action": "Swipe",
+        "begin": [
+            70,
+            460,
+            1,
+            1
+        ],
+        "end": [
+            430,
+            460,
+            1,
+            1
+        ],
+        "duration": 500,
+        "next": [
+            "click_fuli_leiji1"
+        ]
+    },
+    "click_fuli_leiji1": {
+        "recognition": "TemplateMatch",
+        "template": "qiandao/leiji2.png",
+        "roi": [
+            0,
+            0,
+            500,
+            900
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "click_fuli_leiji1_lingqu"
+        ]
+    },
+    "click_fuli_leiji1_lingqu": {
+        "recognition": "OCR",
+        "expected": [
+            "领取"
+        ],
+        "roi": [
+            0,
+            0,
+            500,
+            900
+        ],
+        "max_hit": 2,
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "click_fuli_leiji2"
+        ]
+    },
+    "click_fuli_leiji2": {
+        "recognition": "TemplateMatch",
+        "template": "qiandao/leiji5.png",
+        "roi": [
+            0,
+            0,
+            500,
+            900
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "click_fuli_leiji2_lingqu"
+        ]
+    },
+    "click_fuli_leiji2_lingqu": {
+        "recognition": "OCR",
+        "expected": [
+            "领取"
+        ],
+        "roi": [
+            0,
+            0,
+            500,
+            900
+        ],
+        "max_hit": 2,
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "click_fuli_leiji3"
+        ]
+    },
+    "click_fuli_leiji3": {
+        "recognition": "TemplateMatch",
+        "template": "qiandao/leiji7.png",
+        "roi": [
+            0,
+            0,
+            500,
+            900
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "click_fuli_leiji3_lingqu"
+        ]
+    },
+    "click_fuli_leiji3_lingqu": {
+        "recognition": "OCR",
+        "expected": [
+            "领取"
+        ],
+        "roi": [
+            0,
+            0,
+            500,
+            900
+        ],
+        "max_hit": 2,
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "panduan_zhujiemian"
+        ]
+    }
+}

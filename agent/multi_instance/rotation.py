@@ -6,11 +6,15 @@
   在 MAA 外层用 Python 管理多个 MaaTasker 实例，每个实例绑定一个《梦幻西游：时空》
   客户端窗口（按 HWND），逐号轮转执行任务。
 
-为什么需要本引擎 + 为什么切换前要激活窗口：
-  config/controller_config.json 默认 input_backend="seize"（SendInput）。Seize 输入是发给
-  【前台窗口】的，而不是某个 HWND。所以轮到某个号操作时，必须先用 agent.win32.adapter 把它的
-  窗口强制切到前台（绕过 Windows 焦点抢占锁），否则点击会落在后台号上被吞/点歪。这正是
-  agent/win32/adapter.py 里 _force_foreground / GameWindow.activate() 存在的意义。
+为什么需要本引擎 + 切换前激活窗口的意义：
+  config/controller_config.json 默认 input_backend="seize"。Seize 输入通过 SetWindowsHookEx
+  把消息注入【目标 HWND 的线程消息队列】（而非发给前台窗口），因此理论上【不需要】把窗口切到前台，
+  多个实例可各自后台并发运行、互不抢焦点 —— 这正是本项目选 seize 而非 SendInput 的原因
+  （SendInput 才是系统级、需前台）。
+  注意：本引擎默认 strategy="sequential" + activate_before_run=True 是「仿 MYscript 轮流激活」
+  的保守写法；若要真正发挥 seize 的并发优势，应改为并行策略并关闭 activate_before_run。
+  _force_foreground / GameWindow.activate() 仅在切回 SendInput 后端、或某些游戏后台不认注入输入
+  时才需要。
 
 MAA 接入采用官方 Python 绑定（MaaFw 5.x）：
   Win32Controller(hwnd=...) + Resource.post_bundle(...) + Tasker.bind(...) + Tasker.post_task(...)

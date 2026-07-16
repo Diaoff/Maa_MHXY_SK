@@ -34,6 +34,7 @@ for _p in (ROOT, os.path.join(ROOT, "agent")):
 
 POLL_MS = 600
 RUN_MULTI = os.path.join(ROOT, "tools", "run_multi_instance.py")
+CALIBRATE = os.path.join(ROOT, "tools", "calibrate.py")
 
 
 def _load_controller_config():
@@ -65,7 +66,8 @@ class ConsoleApp:
 
         self.coord = teaming.get_coordinator()
         self._windows = []        # [(idx, hwnd, title)]
-        self._proc = None         # 子进程
+        self._proc = None         # 多开子进程
+        self._calib_proc = None   # 标定工具子进程
         self._stop = False
 
         self._build_ui()
@@ -80,6 +82,7 @@ class ConsoleApp:
         ttk.Button(top, text="刷新窗口", command=self._refresh_windows).pack(side="left")
         ttk.Button(top, text="启动多开", command=self._on_start).pack(side="left", padx=4)
         ttk.Button(top, text="停止多开", command=self._on_stop).pack(side="left")
+        ttk.Button(top, text="标定工具", command=self._on_open_calib).pack(side="left", padx=4)
         ttk.Button(top, text="退出", command=self._on_quit).pack(side="right")
 
         body = ttk.PanedWindow(self.root, orient="horizontal")
@@ -308,10 +311,49 @@ class ConsoleApp:
             self._log("已发送终止信号")
         else:
             self._log("多开未运行")
+    # ---------------- 标定工具 ----------------
+    def _on_open_calib(self):
+        """启动独立的动态标定工具 GUI（tools/calibrate.py）。"""
+        if self._calib_proc and self._calib_proc.poll() is None:
+            self._log("标定工具已在运行")
+            return
+        if not os.path.exists(CALIBRATE):
+            self._log(f"未找到标定工具: {CALIBRATE}")
+            return
+        cmd = [sys.executable, CALIBRATE]
+        self._log(f"启动标定工具: {' '.join(cmd)}")
+        try:
+            self._calib_proc = subprocess.Popen(
+                cmd, cwd=ROOT, stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT, text=True, bufsize=1,
+                creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+        except Exception as e:
+            self._log(f"启动标定工具失败: {e}")
+            return
+        threading.Thread(target=self._pump_calib, args=(self._calib_proc,),
+                        daemon=True).start()
+    def _pump_calib(self, proc):
+        try:
+            for line in proc.stdout:
+                self._log(line.rstrip("\n"), echo=False)
+        except Exception:
+            pass
+        finally:
+            if proc.poll() is None:
+                try:
+                    proc.terminate()
+                except Exception:
+                    pass
+            else:
+                self._log("标定工具已退出")
+    def _close_calib(self):
+        if self._calib_proc and self._calib_proc.poll() is None:
+            self._calib_proc.terminate()
 
     def _on_quit(self):
         self._stop = True
         self._on_stop()
+        self._close_calib()
         self.root.destroy()
 
     # ---------------- 轮询 ----------------

@@ -35,23 +35,14 @@
     },
     "resource": [
         {
-            "name": "时空版-官方重标定",
+            "name": "时空版PC",
             "path": [
-                "./resource/base"
+                "./resource/base",
+                "./resource/NeteasePc"
             ],
             "controller": [
                 "Win32"
             ]
-        },
-        {
-            "name": "时空版-用户标定覆盖",
-            "path": [
-                "./resource/user"
-            ],
-            "controller": [
-                "Win32"
-            ],
-            "description": "标定工具生成的覆盖资源，按节点名覆盖官方重标定层（后加载覆盖先加载）"
         },
         {
             "name": "官方混服",

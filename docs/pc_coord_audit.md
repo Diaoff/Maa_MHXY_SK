@@ -1,0 +1,567 @@
+# PC 版坐标迁移审计（base/pipeline）
+
+- 目标分辨率：**500×900**（竖屏 500×900，来自 config/controller_config.json 的 default_resolution）
+- 判定规则：节点里的 `roi`/`target`/`begin`/`end` 任一坐标超出 `[0,500]×[0,900]` 即判定为**手游坐标，必须重标定**；落在界内的也需 PC 实机验证（UI 元素在竖屏下实际位置已变）。
+- 说明：base 为共享层，新开发建议放 `assets/resource/user/pipeline/` 覆盖层，避免直接改 base。
+
+## 一、任务级汇总
+
+| 任务文件 | 节点数 | 坐标点数 | 需修改(超界) | 在界内待验证 | 坐标极值(maxX,maxY) | 结论 |
+|---|---|---|---|---|---|---|
+| 5R_duiyuan.json | 15 | 10 | 7 | 3 | (1275,694) | 部分需重标定 |
+| 5R_duizhang.json | 18 | 11 | 8 | 3 | (1275,694) | 部分需重标定 |
+| 5R_duizhang_TR.json | 6 | 6 | 2 | 4 | (1272,694) | 部分需重标定 |
+| TS_zhuzhan.json | 15 | 14 | 8 | 6 | (1279,704) | 部分需重标定 |
+| WanJ_menpaichuangguan.json | 21 | 17 | 14 | 3 | (1278,697) | 部分需重标定 |
+| WanJ_mihunta.json | 17 | 11 | 9 | 2 | (1275,697) | 部分需重标定 |
+| WanJ_zhaohuanlingmengjing.json | 20 | 15 | 10 | 5 | (1275,697) | 部分需重标定 |
+| WuJ_baicaogu.json | 16 | 7 | 5 | 2 | (1275,697) | 部分需重标定 |
+| WuJ_jiuliyanwu.json | 33 | 31 | 23 | 8 | (1275,720) | 部分需重标定 |
+| WuJ_mizhen.json | 15 | 9 | 8 | 1 | (1275,697) | 部分需重标定 |
+| auto_switch.json | 17 | 15 | 12 | 3 | (1272,694) | 部分需重标定 |
+| bangpai_qiandao.json | 10 | 7 | 7 | 0 | (1272,694) | 全部需重标定 |
+| bangpai_wanjiandati.json | 12 | 9 | 3 | 6 | (1272,694) | 部分需重标定 |
+| baotu_renwu.json | 19 | 13 | 12 | 1 | (1275,697) | 部分需重标定 |
+| chongwuqifu.json | 20 | 20 | 15 | 5 | (1272,694) | 部分需重标定 |
+| chuangjianduiwu.json | 35 | 33 | 30 | 3 | (1275,694) | 部分需重标定 |
+| chushoushanghui.json | 9 | 7 | 5 | 2 | (1272,694) | 部分需重标定 |
+| fuben115.json | 40 | 33 | 24 | 9 | (1272,699) | 部分需重标定 |
+| fuben69.json | 57 | 45 | 31 | 14 | (1280,694) | 部分需重标定 |
+| fuli_qiandao.json | 16 | 21 | 19 | 2 | (1120,682) | 部分需重标定 |
+| gongfang_kaogu.json | 41 | 43 | 39 | 4 | (1272,694) | 部分需重标定 |
+| huoli.json | 7 | 6 | 6 | 0 | (1280,694) | 全部需重标定 |
+| huoyue_lingqu.json | 8 | 7 | 6 | 1 | (1275,697) | 部分需重标定 |
+| jiayuan_zhengli.json | 33 | 31 | 28 | 3 | (1272,702) | 部分需重标定 |
+| kejuxiangshi.json | 17 | 9 | 8 | 1 | (1275,697) | 部分需重标定 |
+| mijing_renwu.json | 30 | 24 | 21 | 3 | (1280,694) | 部分需重标定 |
+| my_task.json | 35 | 21 | 18 | 3 | (1278,708) | 部分需重标定 |
+| quweijianshang.json | 22 | 26 | 11 | 15 | (1275,697) | 部分需重标定 |
+| renwulian.json | 41 | 40 | 38 | 2 | (1279,697) | 部分需重标定 |
+| sanjieqiyuan.json | 14 | 9 | 6 | 3 | (1275,697) | 部分需重标定 |
+| shimen_renwu.json | 14 | 9 | 9 | 0 | (1280,467) | 全部需重标定 |
+| start.json | 5 | 2 | 2 | 0 | (1159,684) | 全部需重标定 |
+| stop.json | 2 | 0 | 0 | 0 | (0,0) | 无坐标（纯动作/逻辑） |
+| tuichuduiwu.json | 4 | 3 | 1 | 2 | (1272,694) | 部分需重标定 |
+| wabaotu.json | 13 | 9 | 9 | 0 | (1185,685) | 全部需重标定 |
+| wuxingxiuye.json | 14 | 11 | 10 | 1 | (1280,697) | 部分需重标定 |
+| xuanxiangceshi.json | 2 | 0 | 0 | 0 | (0,0) | 无坐标（纯动作/逻辑） |
+| yunbiao_renwu2.json | 12 | 8 | 6 | 2 | (1275,697) | 部分需重标定 |
+| zhengli_baibao.json | 30 | 24 | 21 | 3 | (1272,694) | 部分需重标定 |
+| zhuoguirenwu.json | 38 | 26 | 21 | 5 | (1279,694) | 部分需重标定 |
+
+## 二、需修改坐标明细（超界坐标点）
+
+| 任务文件 | 节点 | 字段 | 原坐标 [x,y,w,h] | 越界原因 |
+|---|---|---|---|---|
+| 5R_duiyuan.json | 队员过渡 | roi | [1206, 637, 66, 57] | 超宽(x+w=1272>500) |
+| 5R_duiyuan.json | 任务栏切换为队伍-一次 | roi | [1164, 101, 70, 65] | 超宽(x+w=1234>500) |
+| 5R_duiyuan.json | 任务栏切换为队伍 | roi | [1164, 101, 70, 65] | 超宽(x+w=1234>500) |
+| 5R_duiyuan.json | 未在队伍中-关闭队伍界面 | target | [1184, 15, 40, 38] | 超宽(x+w=1224>500) |
+| 5R_duiyuan.json | 已经在队伍中 | roi | [1036, 166, 239, 333] | 超宽(x+w=1275>500) |
+| 5R_duiyuan.json | 接受队长进入副本申请 | roi | [727, 621, 190, 64] | 超宽(x+w=917>500) |
+| 5R_duiyuan.json | 接受进入的副本名称 | roi | [441, 25, 411, 70] | 超宽(x+w=852>500) |
+| 5R_duizhang.json | 队长过渡 | roi | [1206, 637, 66, 57] | 超宽(x+w=1272>500) |
+| 5R_duizhang.json | 邀请队员-打开好友界面成功 | roi | [352, 0, 543, 103] | 超宽(x+w=895>500) |
+| 5R_duizhang.json | 邀请队员完成 | roi | [147, 87, 415, 160] | 超宽(x+w=562>500) |
+| 5R_duizhang.json | 邀请队员-输入队员名称-确认 | roi | [1208, 0, 67, 65] | 超宽(x+w=1275>500) |
+| 5R_duizhang.json | 邀请队员-人员信息展开 | roi | [471, 258, 97, 100] | 超宽(x+w=568>500) |
+| 5R_duizhang.json | 邀请队员-点击邀请入队 | roi | [554, 234, 285, 401] | 超宽(x+w=839>500) |
+| 5R_duizhang.json | 邀请队员-清除搜索信息 | roi | [482, 202, 83, 81] | 超宽(x+w=565>500) |
+| 5R_duizhang.json | 邀请队员-队员已经在队伍中 | roi | [554, 234, 285, 401] | 超宽(x+w=839>500) |
+| 5R_duizhang_TR.json | 队长踢人过渡 | roi | [1206, 637, 66, 57] | 超宽(x+w=1272>500) |
+| 5R_duizhang_TR.json | 队长踢人-选人-点击请离队伍 | roi | [308, 129, 874, 494] | 超宽(x+w=1182>500) |
+| TS_zhuzhan.json | 特殊助战-过渡 | roi | [1206, 637, 66, 57] | 超宽(x+w=1272>500) |
+| TS_zhuzhan.json | 两界山小地图_打开成功_点击云岚浮岛 | target | [555, 199, 80, 19] | 超宽(x+w=635>500) |
+| TS_zhuzhan.json | 大地图_传送两界山 | roi | [118, 40, 1033, 622] | 超宽(x+w=1151>500) |
+| TS_zhuzhan.json | 特殊助战_伽蓝 | roi | [825, 227, 138, 52] | 超宽(x+w=963>500) |
+| TS_zhuzhan.json | 伽蓝_聊天 | roi | [923, 231, 317, 274] | 超宽(x+w=1240>500) |
+| TS_zhuzhan.json | 伽蓝_聊天_选择第一个 | target | [962, 307, 237, 46] | 超宽(x+w=1199>500) |
+| TS_zhuzhan.json | 伽蓝_聊天_点击任意地方继续 | roi | [803, 2, 476, 126] | 超宽(x+w=1279>500) |
+| TS_zhuzhan.json | 伽蓝_聊天_正常完成 | roi | [1206, 637, 66, 57] | 超宽(x+w=1272>500) |
+| WanJ_menpaichuangguan.json | 识别-长安城-门派闯关-过渡 | roi | [1206, 637, 66, 57] | 超宽(x+w=1272>500) |
+| WanJ_menpaichuangguan.json | 主界面-门派闯关 | roi | [1197, 540, 78, 157] | 超宽(x+w=1275>500) |
+| WanJ_menpaichuangguan.json | 活动-门派闯关 | roi | [350, 23, 600, 62] | 超宽(x+w=950>500) |
+| WanJ_menpaichuangguan.json | 活动-门派闯关-未到开始时间 | roi | [313, 69, 840, 447] | 超宽(x+w=1153>500) |
+| WanJ_menpaichuangguan.json | 活动-门派闯关-开始 | roi | [313, 69, 840, 447] | 超宽(x+w=1153>500) |
+| WanJ_menpaichuangguan.json | 点击门派闯关 | roi | [931, 268, 303, 240] | 超宽(x+w=1234>500) |
+| WanJ_menpaichuangguan.json | 点击领取门派闯关任务 | roi | [931, 268, 303, 240] | 超宽(x+w=1234>500) |
+| WanJ_menpaichuangguan.json | 门派-已经手动领取任务-任务正式开始 | roi | [1040, 175, 238, 325] | 超宽(x+w=1278>500) |
+| WanJ_menpaichuangguan.json | 门派-点击任务栏任务 | roi | [1040, 175, 238, 325] | 超宽(x+w=1278>500) |
+| WanJ_menpaichuangguan.json | 门派-再次点击任务栏任务 | roi | [1040, 175, 238, 325] | 超宽(x+w=1278>500) |
+| WanJ_menpaichuangguan.json | 门派-点击进入战斗 | roi | [909, 400, 338, 155] | 超宽(x+w=1247>500) |
+| WanJ_menpaichuangguan.json | 门派一轮完成-领取任务 | roi | [1040, 175, 238, 325] | 超宽(x+w=1278>500) |
+| WanJ_menpaichuangguan.json | 门派一轮完成-点击门派闯关 | roi | [931, 268, 303, 240] | 超宽(x+w=1234>500) |
+| WanJ_menpaichuangguan.json | 门派一轮完成-点击领取 | roi | [931, 268, 303, 240] | 超宽(x+w=1234>500) |
+| WanJ_mihunta.json | 识别-长安城-迷魂塔-过渡 | roi | [1206, 637, 66, 57] | 超宽(x+w=1272>500) |
+| WanJ_mihunta.json | 主界面-迷魂塔 | roi | [1197, 540, 78, 157] | 超宽(x+w=1275>500) |
+| WanJ_mihunta.json | 活动-迷魂塔 | roi | [350, 23, 600, 62] | 超宽(x+w=950>500) |
+| WanJ_mihunta.json | 活动-迷魂塔-未到开始时间 | roi | [313, 69, 840, 447] | 超宽(x+w=1153>500) |
+| WanJ_mihunta.json | 活动-迷魂塔-开始 | roi | [313, 69, 840, 447] | 超宽(x+w=1153>500) |
+| WanJ_mihunta.json | 点击前往迷魂塔 | roi | [932, 163, 312, 337] | 超宽(x+w=1244>500) |
+| WanJ_mihunta.json | 点击勇闯迷魂塔 | roi | [1034, 163, 239, 332] | 超宽(x+w=1273>500) |
+| WanJ_mihunta.json | 迷魂塔-点击确定传送 | roi | [917, 410, 335, 102] | 超宽(x+w=1252>500) |
+| WanJ_mihunta.json | 点击-离开迷魂塔 | roi | [929, 347, 311, 85] | 超宽(x+w=1240>500) |
+| WanJ_zhaohuanlingmengjing.json | 识别-长安城-召唤灵梦境-过渡 | roi | [1206, 637, 66, 57] | 超宽(x+w=1272>500) |
+| WanJ_zhaohuanlingmengjing.json | 主界面-召唤灵梦境 | roi | [1197, 540, 78, 157] | 超宽(x+w=1275>500) |
+| WanJ_zhaohuanlingmengjing.json | 活动-召唤灵梦境 | roi | [350, 23, 600, 62] | 超宽(x+w=950>500) |
+| WanJ_zhaohuanlingmengjing.json | 活动-召唤灵梦境-结束 | roi | [313, 69, 840, 447] | 超宽(x+w=1153>500) |
+| WanJ_zhaohuanlingmengjing.json | 活动-召唤灵梦境-未到开始时间 | roi | [313, 69, 840, 447] | 超宽(x+w=1153>500) |
+| WanJ_zhaohuanlingmengjing.json | 活动-召唤灵梦境-开始 | roi | [313, 69, 840, 447] | 超宽(x+w=1153>500) |
+| WanJ_zhaohuanlingmengjing.json | 召唤灵梦境-点击参与活动 | roi | [920, 343, 329, 181] | 超宽(x+w=1249>500) |
+| WanJ_zhaohuanlingmengjing.json | 点击前往召唤灵梦境-点击确定 | roi | [668, 400, 116, 89] | 超宽(x+w=784>500) |
+| WanJ_zhaohuanlingmengjing.json | 召唤灵梦境-点击任务栏 | roi | [1031, 170, 215, 91] | 超宽(x+w=1246>500) |
+| WanJ_zhaohuanlingmengjing.json | 召唤灵梦境-点击挑战 | roi | [923, 412, 315, 137] | 超宽(x+w=1238>500) |
+| WuJ_baicaogu.json | 主界面-百草谷 | roi | [1197, 540, 78, 157] | 超宽(x+w=1275>500) |
+| WuJ_baicaogu.json | 活动-百草谷 | roi | [350, 23, 600, 62] | 超宽(x+w=950>500) |
+| WuJ_baicaogu.json | 活动-百草谷-未开始 | roi | [316, 76, 834, 433] | 超宽(x+w=1150>500) |
+| WuJ_baicaogu.json | 活动-百草谷-已完成 | roi | [316, 76, 834, 433] | 超宽(x+w=1150>500) |
+| WuJ_baicaogu.json | 活动-百草谷-开始 | roi | [316, 76, 834, 433] | 超宽(x+w=1150>500) |
+| WuJ_jiuliyanwu.json | 主界面-九黎 | roi | [1197, 540, 78, 157] | 超宽(x+w=1275>500) |
+| WuJ_jiuliyanwu.json | 活动-九黎 | roi | [350, 23, 600, 62] | 超宽(x+w=950>500) |
+| WuJ_jiuliyanwu.json | 活动-九黎-未开始 | roi | [316, 76, 834, 433] | 超宽(x+w=1150>500) |
+| WuJ_jiuliyanwu.json | 活动-九黎-已完成 | roi | [316, 76, 834, 433] | 超宽(x+w=1150>500) |
+| WuJ_jiuliyanwu.json | 活动-九黎-开始 | roi | [316, 76, 834, 433] | 超宽(x+w=1150>500) |
+| WuJ_jiuliyanwu.json | 点击开始演武 | roi | [913, 292, 336, 209] | 超宽(x+w=1249>500) |
+| WuJ_jiuliyanwu.json | 演武-点击组建小队 | roi | [589, 445, 362, 90] | 超宽(x+w=951>500) |
+| WuJ_jiuliyanwu.json | 演武-组队页面 | roi | [544, 11, 222, 103] | 超宽(x+w=766>500) |
+| WuJ_jiuliyanwu.json | 演武角色-点击确定 | roi | [516, 607, 265, 66] | 超宽(x+w=781>500) |
+| WuJ_jiuliyanwu.json | 演武-选择阵法 | roi | [526, 144, 263, 47] | 超宽(x+w=789>500) |
+| WuJ_jiuliyanwu.json | 演武-选择阵法 | target | [577, 564, 141, 49] | 超宽(x+w=718>500) |
+| WuJ_jiuliyanwu.json | 九黎演武场 | roi | [537, 43, 227, 51] | 超宽(x+w=764>500) |
+| WuJ_jiuliyanwu.json | 演武-开始匹配 | roi | [835, 599, 253, 74] | 超宽(x+w=1088>500) |
+| WuJ_jiuliyanwu.json | 演武-选择困难对手 | target | [741, 183, 222, 191] | 超宽(x+w=963>500) |
+| WuJ_jiuliyanwu.json | 演武-开始挑战 | roi | [843, 606, 250, 67] | 超宽(x+w=1093>500) |
+| WuJ_jiuliyanwu.json | 演武-单次数据显示 | roi | [504, 667, 281, 53] | 超宽(x+w=785>500) |
+| WuJ_jiuliyanwu.json | 演武-单次奖励选择升级 | roi | [441, 600, 273, 54] | 超宽(x+w=714>500) |
+| WuJ_jiuliyanwu.json | 演武-选择第三个角色升级 | target | [582, 319, 76, 59] | 超宽(x+w=658>500) |
+| WuJ_jiuliyanwu.json | 演武-升到10级确定 | roi | [409, 288, 444, 94] | 超宽(x+w=853>500) |
+| WuJ_jiuliyanwu.json | 演武-升到10级确定 | target | [674, 409, 143, 48] | 超宽(x+w=817>500) |
+| WuJ_jiuliyanwu.json | 演武-角色升级-关闭升级提示 | roi | [414, 45, 424, 554] | 超宽(x+w=838>500) |
+| WuJ_jiuliyanwu.json | 演武失败三次 | roi | [1039, 534, 51, 49] | 超宽(x+w=1090>500) |
+| WuJ_jiuliyanwu.json | 演武-完成 | roi | [411, 280, 449, 111] | 超宽(x+w=860>500) |
+| WuJ_mizhen.json | 主界面-迷阵 | roi | [1197, 540, 78, 157] | 超宽(x+w=1275>500) |
+| WuJ_mizhen.json | 活动-迷阵 | roi | [350, 23, 600, 62] | 超宽(x+w=950>500) |
+| WuJ_mizhen.json | 活动-迷阵-未开始 | roi | [316, 76, 834, 433] | 超宽(x+w=1150>500) |
+| WuJ_mizhen.json | 活动-迷阵-已完成 | roi | [316, 76, 834, 433] | 超宽(x+w=1150>500) |
+| WuJ_mizhen.json | 活动-迷阵-开始 | roi | [316, 76, 834, 433] | 超宽(x+w=1150>500) |
+| WuJ_mizhen.json | 点击开始迷阵 | roi | [926, 336, 319, 99] | 超宽(x+w=1245>500) |
+| WuJ_mizhen.json | 进入迷阵界面 | roi | [552, 0, 178, 76] | 超宽(x+w=730>500) |
+| WuJ_mizhen.json | 迷阵到达终点-弹窗 | roi | [396, 242, 490, 234] | 超宽(x+w=886>500) |
+| auto_switch.json | 进入切号 | roi | [1206, 637, 66, 57] | 超宽(x+w=1272>500) |
+| auto_switch.json | 点击系统 | roi | [748, 640, 56, 48] | 超宽(x+w=804>500) |
+| auto_switch.json | 点击切换账号-点击登出 | roi | [682, 394, 130, 48] | 超宽(x+w=812>500) |
+| auto_switch.json | 登录界面 | roi | [474, 399, 280, 44] | 超宽(x+w=754>500) |
+| auto_switch.json | 登录界面-账号选择界面 | roi | [535, 499, 202, 41] | 超宽(x+w=737>500) |
+| auto_switch.json | 点击网易邮箱 | roi | [573, 470, 95, 32] | 超宽(x+w=668>500) |
+| auto_switch.json | 输入账号 | roi | [390, 238, 263, 46] | 超宽(x+w=653>500) |
+| auto_switch.json | 输入密码 | roi | [395, 325, 214, 43] | 超宽(x+w=609>500) |
+| auto_switch.json | 输入账号密码完成 | roi | [381, 231, 308, 151] | 超宽(x+w=689>500) |
+| auto_switch.json | 输入账号密码完成 | target | [589, 410, 104, 51] | 超宽(x+w=693>500) |
+| auto_switch.json | 选择角色 | roi | [476, 402, 40, 35] | 超宽(x+w=516>500) |
+| auto_switch.json | 点击已有角色-选择角色 | roi | [377, 118, 755, 567] | 超宽(x+w=1132>500) |
+| bangpai_qiandao.json | 帮派签到-加号 | roi | [1206, 637, 66, 57] | 超宽(x+w=1272>500) |
+| bangpai_qiandao.json | 帮派签到-乘号 | roi | [1206, 637, 66, 57] | 超宽(x+w=1272>500) |
+| bangpai_qiandao.json | 打开帮派界面成功 | roi | [444, 0, 373, 116] | 超宽(x+w=817>500) |
+| bangpai_qiandao.json | 帮派签到-点击福利 | roi | [1115, 409, 73, 106] | 超宽(x+w=1188>500) |
+| bangpai_qiandao.json | 帮派签到-点击签到 | roi | [882, 461, 195, 63] | 超宽(x+w=1077>500) |
+| bangpai_qiandao.json | 帮派签到-点击领取分红 | roi | [880, 609, 189, 61] | 超宽(x+w=1069>500) |
+| bangpai_qiandao.json | 帮派签到-领取分红-确认 | roi | [517, 544, 237, 64] | 超宽(x+w=754>500) |
+| bangpai_wanjiandati.json | 帮派答题 | roi | [1206, 637, 66, 57] | 超宽(x+w=1272>500) |
+| bangpai_wanjiandati.json | 帮派答题-结束1 | roi | [119, 108, 468, 480] | 超宽(x+w=587>500) |
+| bangpai_wanjiandati.json | 识别问题 | roi | [128, 617, 449, 65] | 超宽(x+w=577>500) |
+| baotu_renwu.json | baotu_huadong_down | begin | [1145, 234, 1, 1] | 超宽(x+w=1146>500) |
+| baotu_renwu.json | baotu_huadong_down | end | [1149, 419, 1, 1] | 超宽(x+w=1150>500) |
+| baotu_renwu.json | 主界面-宝图任务 | roi | [1197, 540, 78, 157] | 超宽(x+w=1275>500) |
+| baotu_renwu.json | 活动-宝图任务 | roi | [350, 23, 600, 62] | 超宽(x+w=950>500) |
+| baotu_renwu.json | 活动-宝图任务-已完成 | roi | [316, 76, 834, 433] | 超宽(x+w=1150>500) |
+| baotu_renwu.json | 活动-宝图任务-开始 | roi | [316, 76, 834, 433] | 超宽(x+w=1150>500) |
+| baotu_renwu.json | click_baotu_ttwf | roi | [925, 137, 311, 363] | 超宽(x+w=1236>500) |
+| baotu_renwu.json | 已领取宝图任务 | roi | [1034, 171, 235, 336] | 超宽(x+w=1269>500) |
+| baotu_renwu.json | 宝图任务单次点击 | roi | [1034, 171, 235, 336] | 超宽(x+w=1269>500) |
+| baotu_renwu.json | 战斗平衡弹窗-点击关闭 | roi | [1215, 4, 48, 51] | 超宽(x+w=1263>500) |
+| baotu_renwu.json | baotu_huodong_down | begin | [733, 380, 1, 1] | 超宽(x+w=734>500) |
+| baotu_renwu.json | baotu_huodong_down | end | [735, 250, 1, 1] | 超宽(x+w=736>500) |
+| chongwuqifu.json | 宠物祈福 | roi | [1206, 637, 66, 57] | 超宽(x+w=1272>500) |
+| chongwuqifu.json | 宠物祈福 | target | [1028, 6, 68, 69] | 超宽(x+w=1096>500) |
+| chongwuqifu.json | 祈福-打开小地图成功-开始移动 | target | [635, 372, 17, 26] | 超宽(x+w=652>500) |
+| chongwuqifu.json | 祈福-关闭祈福庭院小地图 | roi | [1032, 42, 108, 99] | 超宽(x+w=1140>500) |
+| chongwuqifu.json | 识别祈福神树 | roi | [202, 105, 893, 475] | 超宽(x+w=1095>500) |
+| chongwuqifu.json | 祈福-已完成/未开通 | roi | [905, 165, 348, 339] | 超宽(x+w=1253>500) |
+| chongwuqifu.json | 点击祈福 | roi | [905, 165, 348, 339] | 超宽(x+w=1253>500) |
+| chongwuqifu.json | 祈福-选择宠物-向上滑动 | begin | [645, 463] | 超宽(x+w=645>500) |
+| chongwuqifu.json | 祈福-选择宠物-向上滑动 | end | [645, 328] | 超宽(x+w=645>500) |
+| chongwuqifu.json | 默认选择第一个 | roi | [473, 163, 94, 100] | 超宽(x+w=567>500) |
+| chongwuqifu.json | 用户选择需要祈福的召唤灵 | roi | [353, 163, 579, 415] | 超宽(x+w=932>500) |
+| chongwuqifu.json | 识别到对号点击确定 | roi | [339, 75, 620, 546] | 超宽(x+w=959>500) |
+| chongwuqifu.json | 识别到对号点击确定 | target | [542, 592, 193, 48] | 超宽(x+w=735>500) |
+| chongwuqifu.json | 宠物祈福完成-满99领取内丹 | roi | [979, 441, 108, 62] | 超宽(x+w=1087>500) |
+| chongwuqifu.json | 宠物祈福完成 | roi | [672, 147, 132, 398] | 超宽(x+w=804>500) |
+| chuangjianduiwu.json | 队伍-打开界面 | roi | [1206, 637, 66, 57] | 超宽(x+w=1272>500) |
+| chuangjianduiwu.json | 队伍-设置目标 | roi | [761, 52, 69, 69] | 超宽(x+w=830>500) |
+| chuangjianduiwu.json | 队伍-目标-主界面 | roi | [560, 6, 157, 51] | 超宽(x+w=717>500) |
+| chuangjianduiwu.json | 队伍-点击日常任务 | roi | [259, 123, 261, 472] | 超宽(x+w=520>500) |
+| chuangjianduiwu.json | 队伍-点击副本任务520 | roi | [259, 123, 261, 472] | 超宽(x+w=520>500) |
+| chuangjianduiwu.json | 队伍-副本任务520-已选择90-115 | roi | [936, 309, 80, 39] | 超宽(x+w=1016>500) |
+| chuangjianduiwu.json | 等级（左）-向下滑动-一个等级单位 | begin | [799, 210] | 超宽(x+w=799>500) |
+| chuangjianduiwu.json | 等级（左）-向下滑动-一个等级单位 | end | [799, 235] | 超宽(x+w=799>500) |
+| chuangjianduiwu.json | 队伍-副本任务520-调整下限至89 | roi | [775, 220, 45, 44] | 超宽(x+w=820>500) |
+| chuangjianduiwu.json | 队伍-点击副本任务320 | roi | [259, 123, 261, 472] | 超宽(x+w=520>500) |
+| chuangjianduiwu.json | 点击1-69 | roi | [760, 309, 80, 39] | 超宽(x+w=840>500) |
+| chuangjianduiwu.json | 队伍-副本任务320-已选择1-69 | roi | [760, 309, 80, 39] | 超宽(x+w=840>500) |
+| chuangjianduiwu.json | 队伍-任务描述 | target | [778, 422, 138, 36] | 超宽(x+w=916>500) |
+| chuangjianduiwu.json | 队伍-输入框确定 | roi | [1208, 0, 67, 65] | 超宽(x+w=1275>500) |
+| chuangjianduiwu.json | 队伍-目标设置完成-点击确定 | roi | [554, 627, 172, 55] | 超宽(x+w=726>500) |
+| chuangjianduiwu.json | 队伍-目标已设置 | roi | [430, 64, 170, 48] | 超宽(x+w=600>500) |
+| chuangjianduiwu.json | 队伍-点击自动匹配 | roi | [1024, 57, 152, 60] | 超宽(x+w=1176>500) |
+| chuangjianduiwu.json | 队伍-点击一键喊话-当前 | roi | [998, 634, 178, 55] | 超宽(x+w=1176>500) |
+| chuangjianduiwu.json | 队伍-点击-当前频道 | roi | [1003, 302, 171, 319] | 超宽(x+w=1174>500) |
+| chuangjianduiwu.json | 队伍-人员已满 | roi | [1028, 540, 102, 42] | 超宽(x+w=1130>500) |
+| chuangjianduiwu.json | 队伍-有暂离/离线 | roi | [341, 432, 757, 41] | 超宽(x+w=1098>500) |
+| chuangjianduiwu.json | 队伍-有暂离/离线-点击请离队伍 | roi | [336, 153, 767, 295] | 超宽(x+w=1103>500) |
+| chuangjianduiwu.json | 队伍-人员已满-且未有暂离/离线 | roi | [341, 432, 757, 41] | 超宽(x+w=1098>500) |
+| chuangjianduiwu.json | 队伍-退出组队界面 | roi | [1153, 0, 100, 98] | 超宽(x+w=1253>500) |
+| chuangjianduiwu.json | 队伍-点击捉鬼任务 | roi | [259, 123, 261, 472] | 超宽(x+w=520>500) |
+| chuangjianduiwu.json | 点击90-115 | roi | [936, 309, 80, 39] | 超宽(x+w=1016>500) |
+| chuangjianduiwu.json | 队伍-捉鬼任务-已选择90-115 | roi | [936, 309, 80, 39] | 超宽(x+w=1016>500) |
+| chuangjianduiwu.json | 等级（左）-向下滑动-max20 | begin | [800, 149] | 超宽(x+w=800>500) |
+| chuangjianduiwu.json | 等级（左）-向下滑动-max20 | end | [799, 285] | 超宽(x+w=799>500) |
+| chuangjianduiwu.json | 队伍-捉鬼任务-最低20级 | roi | [775, 220, 45, 44] | 超宽(x+w=820>500) |
+| chushoushanghui.json | 打开摆摊 | roi | [1206, 637, 66, 57] | 超宽(x+w=1272>500) |
+| chushoushanghui.json | 打开摆摊成功 | roi | [435, 0, 382, 119] | 超宽(x+w=817>500) |
+| chushoushanghui.json | 点击商会 | roi | [1127, 152, 51, 85] | 超宽(x+w=1178>500) |
+| chushoushanghui.json | 点击我要出售 | roi | [373, 82, 158, 44] | 超宽(x+w=531>500) |
+| chushoushanghui.json | 点击出售 | roi | [936, 629, 166, 56] | 超宽(x+w=1102>500) |
+| fuben115.json | 115识别位置-长安城-副本-过渡 | roi | [1206, 637, 66, 57] | 超宽(x+w=1272>500) |
+| fuben115.json | 再次点击地图百晓仙子 | roi | [114, 69, 1040, 630] | 超宽(x+w=1154>500) |
+| fuben115.json | 再次点击地图百晓仙子 | target | [437, 367, 77, 20] | 超宽(x+w=514>500) |
+| fuben115.json | 115百晓仙子-选择副本 | roi | [923, 156, 324, 356] | 超宽(x+w=1247>500) |
+| fuben115.json | 115选择侠士副本1 | roi | [399, 104, 158, 42] | 超宽(x+w=557>500) |
+| fuben115.json | 115进入侠士副本-等待队员同意 | roi | [462, 606, 333, 65] | 超宽(x+w=795>500) |
+| fuben115.json | 115进入50级侠士副本-成功 | roi | [502, 53, 94, 42] | 超宽(x+w=596>500) |
+| fuben115.json | 115返回长安城-百晓仙子-选择副本 | roi | [923, 156, 324, 356] | 超宽(x+w=1247>500) |
+| fuben115.json | 115选择侠士副本2 | roi | [399, 104, 158, 42] | 超宽(x+w=557>500) |
+| fuben115.json | 115进入70级侠士副本 | roi | [602, 570, 148, 51] | 超宽(x+w=750>500) |
+| fuben115.json | 进入70级侠士副本-失败-再次进入 | roi | [602, 570, 148, 51] | 超宽(x+w=750>500) |
+| fuben115.json | 115进入70级侠士副本-成功 | roi | [502, 53, 94, 42] | 超宽(x+w=596>500) |
+| fuben115.json | 115-70级副本完成-退出 | roi | [1032, 208, 149, 56] | 超宽(x+w=1181>500) |
+| fuben115.json | 115百晓仙子-选择副本-50侠士(第二次进入) | roi | [923, 156, 324, 356] | 超宽(x+w=1247>500) |
+| fuben115.json | 115百晓仙子-侠士副本-50侠士(第二次进入) | roi | [399, 104, 158, 42] | 超宽(x+w=557>500) |
+| fuben115.json | 115-50侠士-副本完成-退出 | roi | [1032, 208, 149, 56] | 超宽(x+w=1181>500) |
+| fuben115.json | 115百晓仙子-选择副本-50普通-1 | roi | [923, 156, 324, 356] | 超宽(x+w=1247>500) |
+| fuben115.json | 115-50普通-1-副本完成-退出 | roi | [1032, 208, 149, 56] | 超宽(x+w=1181>500) |
+| fuben115.json | 115百晓仙子-选择副本-50普通-2 | roi | [923, 156, 324, 356] | 超宽(x+w=1247>500) |
+| fuben115.json | 115进入50级普通副本-2 | roi | [603, 570, 147, 51] | 超宽(x+w=750>500) |
+| fuben115.json | 115-50普通-2-副本完成-退出 | roi | [1032, 208, 149, 56] | 超宽(x+w=1181>500) |
+| fuben115.json | 115百晓仙子-选择副本-50普通-3 | roi | [923, 156, 324, 356] | 超宽(x+w=1247>500) |
+| fuben115.json | 115进入50级普通副本-3 | roi | [889, 569, 146, 51] | 超宽(x+w=1035>500) |
+| fuben115.json | 115-50普通-3-副本完成-退出 | roi | [1032, 208, 149, 56] | 超宽(x+w=1181>500) |
+| fuben69.json | 识别位置-长安城-副本-过渡 | roi | [1206, 637, 66, 57] | 超宽(x+w=1272>500) |
+| fuben69.json | 百晓仙子-选择副本 | roi | [923, 156, 324, 356] | 超宽(x+w=1247>500) |
+| fuben69.json | 选择侠士副本 | roi | [399, 104, 158, 42] | 超宽(x+w=557>500) |
+| fuben69.json | 进入50级侠士副本-成功 | roi | [502, 53, 94, 42] | 超宽(x+w=596>500) |
+| fuben69.json | 50侠士-副本完成-退出 | roi | [1032, 208, 149, 56] | 超宽(x+w=1181>500) |
+| fuben69.json | 点击副本-跳过剧情动画 | roi | [1029, 240, 251, 110] | 超宽(x+w=1280>500) |
+| fuben69.json | 点击副本-开始战斗 | roi | [1240, 225, 39, 48] | 超宽(x+w=1279>500) |
+| fuben69.json | 副本-战斗-对话 | roi | [730, 351, 522, 66] | 超宽(x+w=1252>500) |
+| fuben69.json | 副本-战斗-对话 | target | [951, 442, 268, 46] | 超宽(x+w=1219>500) |
+| fuben69.json | 跳过剧情动画-快进键 | roi | [1185, 4, 94, 78] | 超宽(x+w=1279>500) |
+| fuben69.json | 推荐好友信息 | roi | [477, 108, 318, 64] | 超宽(x+w=795>500) |
+| fuben69.json | 关闭福利弹窗 | roi | [414, 17, 487, 103] | 超宽(x+w=901>500) |
+| fuben69.json | 关闭福利弹窗 | target | [1140, 57, 32, 35] | 超宽(x+w=1172>500) |
+| fuben69.json | 关闭师门弹窗 | roi | [1097, 121, 30, 53] | 超宽(x+w=1127>500) |
+| fuben69.json | 百晓仙子-选择副本-50普通-1 | roi | [923, 156, 324, 356] | 超宽(x+w=1247>500) |
+| fuben69.json | 50普通-1-副本完成-退出 | roi | [1032, 208, 149, 56] | 超宽(x+w=1181>500) |
+| fuben69.json | 百晓仙子-选择副本-50普通-2 | roi | [923, 156, 324, 356] | 超宽(x+w=1247>500) |
+| fuben69.json | 进入50级普通副本-2 | roi | [603, 570, 147, 51] | 超宽(x+w=750>500) |
+| fuben69.json | 50普通-2-副本完成-退出 | roi | [1032, 208, 149, 56] | 超宽(x+w=1181>500) |
+| fuben69.json | 日常抓鬼-钟馗-捉鬼任务 | roi | [925, 73, 312, 482] | 超宽(x+w=1237>500) |
+| fuben69.json | 抓鬼不足五人-图片识别 | roi | [384, 224, 502, 280] | 超宽(x+w=886>500) |
+| fuben69.json | 抓鬼不足五人-捉鬼任务 | roi | [925, 73, 312, 482] | 超宽(x+w=1237>500) |
+| fuben69.json | 抓鬼领取双倍弹窗 | roi | [402, 263, 475, 196] | 超宽(x+w=877>500) |
+| fuben69.json | 日常抓鬼-钟馗-捉鬼任务-开始 | roi | [1032, 165, 247, 300] | 超宽(x+w=1279>500) |
+| fuben69.json | 抓鬼-点击任务栏-通用 | roi | [1032, 165, 247, 300] | 超宽(x+w=1279>500) |
+| fuben69.json | 日常抓鬼-第一轮结束-图片识别 | roi | [401, 254, 475, 214] | 超宽(x+w=876>500) |
+| fuben69.json | 日常抓鬼-第一轮结束-文字识别 | roi | [401, 254, 475, 214] | 超宽(x+w=876>500) |
+| fuben69.json | 日常抓鬼-第二轮 | roi | [401, 254, 475, 214] | 超宽(x+w=876>500) |
+| fuben69.json | 日常抓鬼-第二轮-抓鬼任务 | roi | [925, 73, 312, 482] | 超宽(x+w=1237>500) |
+| fuben69.json | 日常抓鬼-第二轮-抓鬼任务-开始 | roi | [1032, 165, 247, 300] | 超宽(x+w=1279>500) |
+| fuben69.json | 日常抓鬼-第二轮-抓鬼任务-结束 | roi | [401, 254, 475, 214] | 超宽(x+w=876>500) |
+| fuli_qiandao.json | dakaiguaguale | roi | [877, 590, 229, 79] | 超宽(x+w=1106>500) |
+| fuli_qiandao.json | qiandaohuadong | begin | [633, 365, 1, 1] | 超宽(x+w=634>500) |
+| fuli_qiandao.json | qiandaohuadong | end | [1048, 364, 1, 1] | 超宽(x+w=1049>500) |
+| fuli_qiandao.json | qiandaohuadong2 | begin | [615, 383, 1, 1] | 超宽(x+w=616>500) |
+| fuli_qiandao.json | qiandaohuadong2 | end | [1051, 383, 1, 1] | 超宽(x+w=1052>500) |
+| fuli_qiandao.json | qiandaohuadong3 | begin | [629, 418, 1, 1] | 超宽(x+w=630>500) |
+| fuli_qiandao.json | qiandaohuadong3 | end | [1053, 418, 1, 1] | 超宽(x+w=1054>500) |
+| fuli_qiandao.json | qiandaohuadong4 | begin | [606, 399, 1, 1] | 超宽(x+w=607>500) |
+| fuli_qiandao.json | qiandaohuadong4 | end | [1069, 401, 1, 1] | 超宽(x+w=1070>500) |
+| fuli_qiandao.json | qiandaohuadong5 | begin | [617, 449, 1, 1] | 超宽(x+w=618>500) |
+| fuli_qiandao.json | qiandaohuadong5 | end | [1056, 450, 1, 1] | 超宽(x+w=1057>500) |
+| fuli_qiandao.json | qiandaohuadong6 | begin | [597, 462, 1, 1] | 超宽(x+w=598>500) |
+| fuli_qiandao.json | qiandaohuadong6 | end | [1048, 472, 1, 1] | 超宽(x+w=1049>500) |
+| fuli_qiandao.json | click_fuli_leiji1 | roi | [789, 638, 98, 44] | 超宽(x+w=887>500) |
+| fuli_qiandao.json | click_fuli_leiji1_lingqu | target | [800, 564, 78, 77] | 超宽(x+w=878>500) |
+| fuli_qiandao.json | click_fuli_leiji2 | roi | [903, 639, 99, 41] | 超宽(x+w=1002>500) |
+| fuli_qiandao.json | click_fuli_leiji2_lingqu | target | [915, 564, 76, 72] | 超宽(x+w=991>500) |
+| fuli_qiandao.json | click_fuli_leiji3 | roi | [1019, 639, 101, 41] | 超宽(x+w=1120>500) |
+| fuli_qiandao.json | click_fuli_leiji3_lingqu | target | [1031, 561, 76, 77] | 超宽(x+w=1107>500) |
+| gongfang_kaogu.json | 主界面-工坊考古-加号 | roi | [1206, 637, 66, 57] | 超宽(x+w=1272>500) |
+| gongfang_kaogu.json | 主界面-工坊考古-乘号 | roi | [1206, 637, 66, 57] | 超宽(x+w=1272>500) |
+| gongfang_kaogu.json | 工坊考古-打开技能界面成功 | roi | [348, 0, 548, 104] | 超宽(x+w=896>500) |
+| gongfang_kaogu.json | 工坊考古-切换辅助技能界面 | roi | [1108, 512, 83, 141] | 超宽(x+w=1191>500) |
+| gongfang_kaogu.json | 工坊考古-点击考古入口 | roi | [879, 126, 222, 236] | 超宽(x+w=1101>500) |
+| gongfang_kaogu.json | 工坊考古-进入界面成功 | roi | [462, 0, 362, 118] | 超宽(x+w=824>500) |
+| gongfang_kaogu.json | 工坊考古-界面-切换技能生产 | roi | [1101, 252, 96, 179] | 超宽(x+w=1197>500) |
+| gongfang_kaogu.json | 活力不足_停止考古 | roi | [761, 559, 68, 28] | 超宽(x+w=829>500) |
+| gongfang_kaogu.json | 工坊考古-界面-二阶点击加号 | target | [727, 311, 40, 47] | 超宽(x+w=767>500) |
+| gongfang_kaogu.json | 工坊考古-选择工具界面 | roi | [569, 136, 150, 48] | 超宽(x+w=719>500) |
+| gongfang_kaogu.json | 工坊考古-工具-购买洛阳铲 | roi | [337, 173, 322, 148] | 超宽(x+w=659>500) |
+| gongfang_kaogu.json | 工坊考古-工具-选择洛阳铲 | roi | [153, 77, 607, 476] | 超宽(x+w=760>500) |
+| gongfang_kaogu.json | 工坊考古-工具-购买洛阳铲-点击购买 | roi | [887, 112, 106, 64] | 超宽(x+w=993>500) |
+| gongfang_kaogu.json | 工坊考古-工具-购买洛阳铲-点击购买 | target | [890, 592, 153, 57] | 超宽(x+w=1043>500) |
+| gongfang_kaogu.json | 工坊考古-工具-购买洛阳铲-关闭杂货铺界面 | roi | [1104, 112, 98, 93] | 超宽(x+w=1202>500) |
+| gongfang_kaogu.json | 工坊考古-工具-洛阳铲 | roi | [351, 179, 304, 388] | 超宽(x+w=655>500) |
+| gongfang_kaogu.json | 工坊考古-工具-洛阳铲-点击使用 | roi | [661, 203, 100, 51] | 超宽(x+w=761>500) |
+| gongfang_kaogu.json | 工坊考古-工具-洛阳铲-点击使用 | target | [702, 510, 190, 46] | 超宽(x+w=892>500) |
+| gongfang_kaogu.json | 工坊考古-界面-点击考古 | roi | [684, 270, 126, 120] | 超宽(x+w=810>500) |
+| gongfang_kaogu.json | 工坊考古-界面-点击考古 | target | [662, 607, 173, 46] | 超宽(x+w=835>500) |
+| gongfang_kaogu.json | 工坊考古-洛阳铲挖掘 | roi | [1030, 398, 126, 128] | 超宽(x+w=1156>500) |
+| gongfang_kaogu.json | 工坊考古-点击挖掘 | target | [1044, 550, 101, 51] | 超宽(x+w=1145>500) |
+| gongfang_kaogu.json | 关闭临时包裹 | roi | [541, 174, 201, 40] | 超宽(x+w=742>500) |
+| gongfang_kaogu.json | 关闭临时包裹 | target | [845, 152, 41, 42] | 超宽(x+w=886>500) |
+| gongfang_kaogu.json | 工坊考古-洛阳铲-单次挖掘 | roi | [1030, 398, 126, 128] | 超宽(x+w=1156>500) |
+| gongfang_kaogu.json | 工坊考古-洛阳铲-单次挖掘 | target | [1044, 550, 101, 51] | 超宽(x+w=1145>500) |
+| gongfang_kaogu.json | 考古一轮结束 | roi | [1030, 398, 126, 128] | 超宽(x+w=1156>500) |
+| gongfang_kaogu.json | 古董售卖-过渡 | roi | [1206, 637, 66, 57] | 超宽(x+w=1272>500) |
+| gongfang_kaogu.json | 古董售卖-打开背包成功-向上滑动到顶端 | roi | [335, 5, 577, 68] | 超宽(x+w=912>500) |
+| gongfang_kaogu.json | 古董售卖-点击整理 | roi | [873, 609, 241, 77] | 超宽(x+w=1114>500) |
+| gongfang_kaogu.json | 古董售卖-点击古董 | roi | [616, 139, 493, 514] | 超宽(x+w=1109>500) |
+| gongfang_kaogu.json | 古董售卖-点击古董失败 | roi | [413, 296, 177, 337] | 超宽(x+w=590>500) |
+| gongfang_kaogu.json | 古董售卖-点击古董失败-再次点击古董 | roi | [616, 139, 493, 514] | 超宽(x+w=1109>500) |
+| gongfang_kaogu.json | 古董售卖-古董-点击使用 | roi | [413, 296, 177, 337] | 超宽(x+w=590>500) |
+| gongfang_kaogu.json | 古董售卖-界面-售卖-真品确定 | roi | [672, 408, 157, 69] | 超宽(x+w=829>500) |
+| gongfang_kaogu.json | 古董售卖-界面-点击售卖 | target | [890, 592, 150, 58] | 超宽(x+w=1040>500) |
+| gongfang_kaogu.json | 古董售卖-界面-非真品售卖完成 | roi | [464, 420, 142, 51] | 超宽(x+w=606>500) |
+| gongfang_kaogu.json | 古董售卖-售卖完成 | roi | [766, 66, 368, 382] | 超宽(x+w=1134>500) |
+| gongfang_kaogu.json | 古董售卖-返回主界面 | roi | [1099, 105, 105, 108] | 超宽(x+w=1204>500) |
+| huoli.json | 打开人物界面-过渡 | roi | [1206, 637, 66, 57] | 超宽(x+w=1272>500) |
+| huoli.json | 人物界面-按键打开失败-点击图标 | roi | [1181, 3, 99, 99] | 超宽(x+w=1280>500) |
+| huoli.json | 人物界面-按键打开失败-点击图标 | target | [1185, 5, 91, 92] | 超宽(x+w=1276>500) |
+| huoli.json | 打开人物界面-成功 | roi | [531, 3, 175, 60] | 超宽(x+w=706>500) |
+| huoli.json | 点击活力使用 | roi | [977, 232, 120, 71] | 超宽(x+w=1097>500) |
+| huoli.json | 点击打工 | roi | [891, 202, 152, 438] | 超宽(x+w=1043>500) |
+| huoyue_lingqu.json | 主界面-活跃领取 | roi | [1197, 540, 78, 157] | 超宽(x+w=1275>500) |
+| huoyue_lingqu.json | 活跃奖励领取-打开活动界面成功 | roi | [350, 23, 600, 62] | 超宽(x+w=950>500) |
+| huoyue_lingqu.json | 领取活跃奖励5 | target | [1031, 530, 72, 75] | 超宽(x+w=1103>500) |
+| huoyue_lingqu.json | 领取活跃奖励4 | target | [872, 524, 81, 79] | 超宽(x+w=953>500) |
+| huoyue_lingqu.json | 领取活跃奖励3 | target | [730, 528, 70, 80] | 超宽(x+w=800>500) |
+| huoyue_lingqu.json | 领取活跃奖励2 | target | [572, 527, 80, 77] | 超宽(x+w=652>500) |
+| jiayuan_zhengli.json | 家园-主界面-加号 | roi | [1206, 637, 66, 57] | 超宽(x+w=1272>500) |
+| jiayuan_zhengli.json | 家园-主界面-乘号 | roi | [1206, 637, 66, 57] | 超宽(x+w=1272>500) |
+| jiayuan_zhengli.json | 点击家园 | roi | [977, 640, 60, 46] | 超宽(x+w=1037>500) |
+| jiayuan_zhengli.json | 家园界面-按键失败-点击家园图标 | roi | [977, 640, 60, 46] | 超宽(x+w=1037>500) |
+| jiayuan_zhengli.json | 点击回家 | roi | [1008, 442, 136, 93] | 超宽(x+w=1144>500) |
+| jiayuan_zhengli.json | 点击打理 | roi | [1036, 622, 93, 80] | 超宽(x+w=1129>500) |
+| jiayuan_zhengli.json | 点击大扫除 | roi | [822, 351, 191, 125] | 超宽(x+w=1013>500) |
+| jiayuan_zhengli.json | 点击开始大扫除 | roi | [638, 400, 220, 119] | 超宽(x+w=858>500) |
+| jiayuan_zhengli.json | 满状态-不用大扫除 | roi | [638, 400, 220, 119] | 超宽(x+w=858>500) |
+| jiayuan_zhengli.json | 点击佣人管理 | roi | [1032, 473, 51, 138] | 超宽(x+w=1083>500) |
+| jiayuan_zhengli.json | 点击管家寻路 | roi | [700, 202, 40, 53] | 超宽(x+w=740>500) |
+| jiayuan_zhengli.json | 点击管家失败-再次点击 | roi | [700, 202, 40, 53] | 超宽(x+w=740>500) |
+| jiayuan_zhengli.json | 进入召唤灵界面 | roi | [570, 5, 187, 77] | 超宽(x+w=757>500) |
+| jiayuan_zhengli.json | 召唤灵点击喂养-3次 | roi | [672, 627, 173, 72] | 超宽(x+w=845>500) |
+| jiayuan_zhengli.json | 召唤灵点击喂养-确定 | roi | [650, 380, 183, 96] | 超宽(x+w=833>500) |
+| jiayuan_zhengli.json | 召唤灵点击喂养-未识别到确定 | roi | [650, 380, 183, 96] | 超宽(x+w=833>500) |
+| jiayuan_zhengli.json | 卧室-点击打理 | roi | [1036, 622, 93, 80] | 超宽(x+w=1129>500) |
+| jiayuan_zhengli.json | 再次点击-卧室-点击打理 | roi | [1036, 622, 93, 80] | 超宽(x+w=1129>500) |
+| jiayuan_zhengli.json | 卧室-点击佣人 | roi | [1032, 473, 51, 138] | 超宽(x+w=1083>500) |
+| jiayuan_zhengli.json | 卧室-点击管家 | roi | [700, 202, 40, 53] | 超宽(x+w=740>500) |
+| jiayuan_zhengli.json | 卧室家具-未开启 | roi | [465, 430, 171, 78] | 超宽(x+w=636>500) |
+| jiayuan_zhengli.json | 点击卧室家具 | roi | [465, 430, 171, 78] | 超宽(x+w=636>500) |
+| jiayuan_zhengli.json | 休息失败 | roi | [540, 18, 254, 60] | 超宽(x+w=794>500) |
+| jiayuan_zhengli.json | 进入卧室休息界面 | roi | [540, 18, 254, 60] | 超宽(x+w=794>500) |
+| jiayuan_zhengli.json | 卧室-点击休息-4次 | roi | [555, 619, 218, 70] | 超宽(x+w=773>500) |
+| jiayuan_zhengli.json | 休息满活力确认 | roi | [664, 375, 164, 81] | 超宽(x+w=828>500) |
+| jiayuan_zhengli.json | 休息不需要确认 | roi | [664, 375, 164, 81] | 超宽(x+w=828>500) |
+| jiayuan_zhengli.json | 休息已完成-回到主界面 | roi | [540, 18, 254, 60] | 超宽(x+w=794>500) |
+| kejuxiangshi.json | 主界面-科举乡试 | roi | [1197, 540, 78, 157] | 超宽(x+w=1275>500) |
+| kejuxiangshi.json | 活动-科举乡试 | roi | [350, 23, 600, 62] | 超宽(x+w=950>500) |
+| kejuxiangshi.json | 活动-科举乡试-进入答题界面 | roi | [528, 65, 244, 67] | 超宽(x+w=772>500) |
+| kejuxiangshi.json | 活动-科举乡试-结束ocr1 | roi | [580, 351, 407, 65] | 超宽(x+w=987>500) |
+| kejuxiangshi.json | 活动-科举乡试-结束ocr2 | roi | [565, 330, 504, 74] | 超宽(x+w=1069>500) |
+| kejuxiangshi.json | 活动-科举乡试-结束-图片 | roi | [481, 137, 47, 98] | 超宽(x+w=528>500) |
+| kejuxiangshi.json | 活动-科举乡试-开始答题_普通 | target | [487, 322, 150, 58] | 超宽(x+w=637>500) |
+| kejuxiangshi.json | 活动-科举乡试-正确率 | roi | [863, 149, 78, 43] | 超宽(x+w=941>500) |
+| mijing_renwu.json | 识别位置-东海湾-秘境-过渡 | roi | [1206, 637, 66, 57] | 超宽(x+w=1272>500) |
+| mijing_renwu.json | 东海湾小地图打开成功 | roi | [444, 56, 60, 64] | 超宽(x+w=504>500) |
+| mijing_renwu.json | click_map_yunleyou | roi | [500, 382, 89, 37] | 超宽(x+w=589>500) |
+| mijing_renwu.json | mijingxiangyao | roi | [921, 89, 324, 405] | 超宽(x+w=1245>500) |
+| mijing_renwu.json | 秘境降妖-选择模式 | roi | [231, 85, 774, 106] | 超宽(x+w=1005>500) |
+| mijing_renwu.json | 秘境降妖-海底秘境模式-确认 | roi | [671, 405, 149, 59] | 超宽(x+w=820>500) |
+| mijing_renwu.json | 秘境降妖-海底秘境-继续挑战 | roi | [996, 481, 78, 179] | 超宽(x+w=1074>500) |
+| mijing_renwu.json | 海底秘境-指定关卡结束任务 | roi | [1014, 209, 101, 109] | 超宽(x+w=1115>500) |
+| mijing_renwu.json | 海底秘境-点击关卡 | roi | [1014, 209, 101, 109] | 超宽(x+w=1115>500) |
+| mijing_renwu.json | 秘境-点击进入战斗 | roi | [939, 366, 285, 63] | 超宽(x+w=1224>500) |
+| mijing_renwu.json | mijing_tongguan | roi | [1014, 260, 122, 56] | 超宽(x+w=1136>500) |
+| mijing_renwu.json | mijing_shibai | roi | [304, 130, 654, 275] | 超宽(x+w=958>500) |
+| mijing_renwu.json | 秘境-点击离开 | roi | [1135, 318, 145, 243] | 超宽(x+w=1280>500) |
+| mijing_renwu.json | 秘境降妖-点击日月之井 | roi | [776, 605, 205, 59] | 超宽(x+w=981>500) |
+| mijing_renwu.json | 秘境降妖-日月之井-确认 | roi | [671, 405, 149, 59] | 超宽(x+w=820>500) |
+| mijing_renwu.json | 秘境降妖-日月之井-继续挑战 | roi | [996, 481, 78, 179] | 超宽(x+w=1074>500) |
+| mijing_renwu.json | 日月之井-指定关卡结束任务 | roi | [1012, 169, 115, 74] | 超宽(x+w=1127>500) |
+| mijing_renwu.json | 日月之井-点击关卡 | roi | [1012, 169, 115, 74] | 超宽(x+w=1127>500) |
+| mijing_renwu.json | 日月之井-通关 | roi | [1012, 169, 115, 100] | 超宽(x+w=1127>500) |
+| mijing_renwu.json | 日月之井-失败 | roi | [304, 130, 654, 375] | 超宽(x+w=958>500) |
+| mijing_renwu.json | 秘境-日月-点击离开 | roi | [1161, 353, 114, 196] | 超宽(x+w=1275>500) |
+| my_task.json | huadongcs | begin | [900, 500, 10, 10] | 超宽(x+w=910>500) |
+| my_task.json | huadongcs | end | [900, 100, 10, 10] | 超宽(x+w=910>500) |
+| my_task.json | dengluyouxi | roi | [537, 501, 192, 46] | 超宽(x+w=729>500) |
+| my_task.json | dashaochu | roi | [940, 431, 287, 62] | 超宽(x+w=1227>500) |
+| my_task.json | 主界面 | roi | [1197, 540, 78, 157] | 超宽(x+w=1275>500) |
+| my_task.json | amazing_discount | roi | [233, 40, 846, 324] | 超宽(x+w=1079>500) |
+| my_task.json | amazing_discount_close | roi | [947, 61, 120, 127] | 超宽(x+w=1067>500) |
+| my_task.json | panduan_zhujiemian_ks | roi | [1197, 540, 78, 157] | 超宽(x+w=1275>500) |
+| my_task.json | 关闭X9联赛弹窗 | roi | [1048, 51, 66, 64] | 超宽(x+w=1114>500) |
+| my_task.json | 关闭三界热点 | roi | [472, 666, 332, 38] | 超宽(x+w=804>500) |
+| my_task.json | 战斗中-等待100秒 | roi | [1175, 549, 103, 159] | 超宽(x+w=1278>500) |
+| my_task.json | 战斗中-等待50秒 | roi | [1175, 549, 103, 159] | 超宽(x+w=1278>500) |
+| my_task.json | 战斗中-等待20秒 | roi | [1175, 549, 103, 159] | 超宽(x+w=1278>500) |
+| my_task.json | 战斗中-等待10秒 | roi | [1175, 549, 103, 159] | 超宽(x+w=1278>500) |
+| my_task.json | 战斗中-等待5秒 | roi | [1175, 549, 103, 159] | 超宽(x+w=1278>500) |
+| my_task.json | 自动寻路中-图片识别 | roi | [257, 133, 770, 461] | 超宽(x+w=1027>500) |
+| my_task.json | 识别输出测试 | roi | [916, 316, 139, 45] | 超宽(x+w=1055>500) |
+| my_task.json | 关闭整点活动弹窗 | roi | [846, 394, 80, 83] | 超宽(x+w=926>500) |
+| quweijianshang.json | 主界面-趣味鉴赏 | roi | [1197, 540, 78, 157] | 超宽(x+w=1275>500) |
+| quweijianshang.json | 活动-趣味鉴赏 | roi | [350, 23, 600, 62] | 超宽(x+w=950>500) |
+| quweijianshang.json | 活动-趣味鉴赏-已完成 | roi | [316, 76, 834, 433] | 超宽(x+w=1150>500) |
+| quweijianshang.json | 活动-趣味鉴赏-开始 | roi | [316, 76, 834, 433] | 超宽(x+w=1150>500) |
+| quweijianshang.json | 趣味鉴赏-进入界面成功 | roi | [596, 294, 40, 102] | 超宽(x+w=636>500) |
+| quweijianshang.json | 鉴赏第一次 | roi | [120, 95, 468, 592] | 超宽(x+w=588>500) |
+| quweijianshang.json | 鉴赏第二次 | roi | [120, 95, 468, 592] | 超宽(x+w=588>500) |
+| quweijianshang.json | 鉴赏第三次 | roi | [120, 95, 468, 592] | 超宽(x+w=588>500) |
+| quweijianshang.json | 鉴赏第四次 | roi | [120, 95, 468, 592] | 超宽(x+w=588>500) |
+| quweijianshang.json | 鉴赏第五次 | roi | [120, 95, 468, 592] | 超宽(x+w=588>500) |
+| quweijianshang.json | 关闭聊天窗口 | roi | [596, 294, 40, 102] | 超宽(x+w=636>500) |
+| renwulian.json | 经验任务链-过渡 | roi | [1197, 540, 78, 157] | 超宽(x+w=1275>500) |
+| renwulian.json | 背包金币数量-打开背包成功 | roi | [335, 5, 577, 68] | 超宽(x+w=912>500) |
+| renwulian.json | 关闭背包界面 | roi | [335, 5, 577, 68] | 超宽(x+w=912>500) |
+| renwulian.json | 关闭背包界面 | target | [1083, 27, 41, 47] | 超宽(x+w=1124>500) |
+| renwulian.json | 经验链-开始 | roi | [1034, 167, 245, 340] | 超宽(x+w=1279>500) |
+| renwulian.json | 经验链-寻人-对话确认 | roi | [923, 26, 324, 540] | 超宽(x+w=1247>500) |
+| renwulian.json | 经验链-寻宠-购买 | roi | [525, 14, 250, 46] | 超宽(x+w=775>500) |
+| renwulian.json | 经验链-寻宠-购买 | target | [955, 625, 164, 45] | 超宽(x+w=1119>500) |
+| renwulian.json | 经验链-寻宠-对话确认 | roi | [923, 26, 324, 540] | 超宽(x+w=1247>500) |
+| renwulian.json | 经验链-寻宠-上交 | roi | [769, 559, 166, 55] | 超宽(x+w=935>500) |
+| renwulian.json | 经验链-寻物-二级药购买 | roi | [577, 12, 131, 51] | 超宽(x+w=708>500) |
+| renwulian.json | 经验链-寻物-二级药购买 | target | [908, 565, 132, 42] | 超宽(x+w=1040>500) |
+| renwulian.json | 经验链-寻物-红/绿罗羹购买 | roi | [577, 12, 131, 51] | 超宽(x+w=708>500) |
+| renwulian.json | 经验链-寻物-红/绿罗羹购买 | target | [908, 565, 132, 42] | 超宽(x+w=1040>500) |
+| renwulian.json | 经验链-寻物-摆摊购买 | roi | [435, 0, 382, 119] | 超宽(x+w=817>500) |
+| renwulian.json | 经验链-寻物-摆摊购买 | target | [908, 565, 132, 42] | 超宽(x+w=1040>500) |
+| renwulian.json | 经验链-寻物-三药/烹饪购买 | roi | [806, 84, 83, 38] | 超宽(x+w=889>500) |
+| renwulian.json | 经验链-寻物-点击购买 | roi | [930, 629, 165, 54] | 超宽(x+w=1095>500) |
+| renwulian.json | 经验链-寻物-购买物品被抢-再次选择物品 | roi | [435, 0, 382, 119] | 超宽(x+w=817>500) |
+| renwulian.json | 经验链-寻物-购买物品被抢-再次选择物品 | target | [492, 175, 219, 75] | 超宽(x+w=711>500) |
+| renwulian.json | 经验链-寻物-购买物品被抢-点击购买 | target | [929, 630, 165, 50] | 超宽(x+w=1094>500) |
+| renwulian.json | 经验链-寻物-购买物品成功 | roi | [435, 0, 382, 119] | 超宽(x+w=817>500) |
+| renwulian.json | 经验链-寻物-玫瑰/金兰花 | roi | [813, 80, 161, 52] | 超宽(x+w=974>500) |
+| renwulian.json | 经验链-寻物-玫瑰/金兰花-传说过度 | roi | [1206, 637, 66, 57] | 超宽(x+w=1272>500) |
+| renwulian.json | 经验链-寻物-打开挂机界面成功 | roi | [535, 16, 214, 51] | 超宽(x+w=749>500) |
+| renwulian.json | 经验链-寻物-打开挂机界面成功-点击云梦泽 | roi | [167, 373, 989, 135] | 超宽(x+w=1156>500) |
+| renwulian.json | 经验链-寻物-对话确认 | roi | [923, 26, 324, 540] | 超宽(x+w=1247>500) |
+| renwulian.json | 经验链-寻物-上交 | roi | [980, 561, 163, 60] | 超宽(x+w=1143>500) |
+| renwulian.json | 经验链-战斗-对话确认 | roi | [923, 26, 324, 540] | 超宽(x+w=1247>500) |
+| renwulian.json | 经验链-战斗-点击开始战斗 | roi | [923, 26, 324, 540] | 超宽(x+w=1247>500) |
+| renwulian.json | 经验链-最后一个任务 | roi | [1034, 167, 245, 340] | 超宽(x+w=1279>500) |
+| renwulian.json | 经验链-寻物-50/60装备 | roi | [813, 80, 161, 52] | 超宽(x+w=974>500) |
+| renwulian.json | 经验链-寻物-装备名称 | roi | [813, 80, 161, 52] | 超宽(x+w=974>500) |
+| renwulian.json | 经验链-寻物-关闭摆摊界面 | roi | [1043, 8, 143, 101] | 超宽(x+w=1186>500) |
+| renwulian.json | 经验链-寻物-打造-加号 | roi | [1206, 637, 66, 57] | 超宽(x+w=1272>500) |
+| renwulian.json | 经验链-寻物-打造-乘号 | roi | [1206, 637, 66, 57] | 超宽(x+w=1272>500) |
+| renwulian.json | 经验链-寻物-打开打造界面成功 | roi | [1022, 24, 131, 268] | 超宽(x+w=1153>500) |
+| renwulian.json | 经验链-寻物-打开打造界面成功-切换打造 | roi | [1022, 24, 131, 268] | 超宽(x+w=1153>500) |
+| sanjieqiyuan.json | 主界面-三界奇缘 | roi | [1197, 540, 78, 157] | 超宽(x+w=1275>500) |
+| sanjieqiyuan.json | 活动-三界奇缘 | roi | [350, 23, 600, 62] | 超宽(x+w=950>500) |
+| sanjieqiyuan.json | 活动-三界奇缘-未到开始时间 | roi | [316, 76, 834, 433] | 超宽(x+w=1150>500) |
+| sanjieqiyuan.json | 活动-三界奇缘-开始 | roi | [316, 76, 834, 433] | 超宽(x+w=1150>500) |
+| sanjieqiyuan.json | 活动-三界奇缘-结束 | roi | [662, 413, 262, 43] | 超宽(x+w=924>500) |
+| sanjieqiyuan.json | 活动-三界奇缘-开始答题 | roi | [450, 340, 227, 92] | 超宽(x+w=677>500) |
+| shimen_renwu.json | shimen_renwu2_dianji | roi | [1035, 112, 245, 294] | 超宽(x+w=1280>500) |
+| shimen_renwu.json | 点击师门任务失败-再次点击 | roi | [1035, 112, 245, 294] | 超宽(x+w=1280>500) |
+| shimen_renwu.json | shimen_renwu2_dianji2 | roi | [1035, 112, 245, 294] | 超宽(x+w=1280>500) |
+| shimen_renwu.json | 师门-点击去完成 | roi | [398, 408, 704, 59] | 超宽(x+w=1102>500) |
+| shimen_renwu.json | 师门任务-单次点击 | roi | [1036, 113, 240, 150] | 超宽(x+w=1276>500) |
+| shimen_renwu.json | 师门完成-九转天阶遮挡 | roi | [293, 47, 834, 260] | 超宽(x+w=1127>500) |
+| shimen_renwu.json | 师门完成-九幽遮挡 | roi | [1085, 128, 64, 71] | 超宽(x+w=1149>500) |
+| shimen_renwu.json | 师门完成确定-图片识别 | roi | [404, 181, 444, 80] | 超宽(x+w=848>500) |
+| shimen_renwu.json | 师门完成确定-文字识别 | roi | [430, 180, 410, 96] | 超宽(x+w=840>500) |
+| start.json | 正在下载本周更新 | roi | [196, 618, 963, 66] | 超宽(x+w=1159>500) |
+| start.json | 点击登录游戏 | roi | [504, 490, 268, 76] | 超宽(x+w=772>500) |
+| tuichuduiwu.json | 退出队伍过度 | roi | [1206, 637, 66, 57] | 超宽(x+w=1272>500) |
+| wabaotu.json | 清理主界面使用-关闭完成 | roi | [1135, 369, 50, 46] | 超宽(x+w=1185>500) |
+| wabaotu.json | 清理主界面使用-关闭 | roi | [1135, 369, 50, 46] | 超宽(x+w=1185>500) |
+| wabaotu.json | 挖宝图-打开背包-成功-并向上滑动到顶端 | roi | [335, 5, 577, 68] | 超宽(x+w=912>500) |
+| wabaotu.json | 挖宝图-点击整理 | roi | [879, 618, 234, 67] | 超宽(x+w=1113>500) |
+| wabaotu.json | 点击藏宝图 | roi | [632, 140, 473, 484] | 超宽(x+w=1105>500) |
+| wabaotu.json | 藏宝图-背包使用 | roi | [425, 418, 159, 63] | 超宽(x+w=584>500) |
+| wabaotu.json | 藏宝图-主界面使用 | roi | [1013, 536, 157, 73] | 超宽(x+w=1170>500) |
+| wabaotu.json | 挖宝图完成判断-打开背包成功 | roi | [335, 5, 577, 68] | 超宽(x+w=912>500) |
+| wabaotu.json | 挖宝图完成 | roi | [905, 543, 187, 94] | 超宽(x+w=1092>500) |
+| wuxingxiuye.json | 主界面-五行修业 | roi | [1197, 540, 78, 157] | 超宽(x+w=1275>500) |
+| wuxingxiuye.json | 活动-五行修业 | roi | [350, 23, 600, 62] | 超宽(x+w=950>500) |
+| wuxingxiuye.json | 活动-五行修业-已完成 | roi | [316, 76, 834, 433] | 超宽(x+w=1150>500) |
+| wuxingxiuye.json | 活动-五行修业-开始 | roi | [316, 76, 834, 433] | 超宽(x+w=1150>500) |
+| wuxingxiuye.json | 五行修业-点击五行修业 | roi | [920, 285, 326, 271] | 超宽(x+w=1246>500) |
+| wuxingxiuye.json | 五行修业-点击领取任务 | roi | [920, 285, 326, 271] | 超宽(x+w=1246>500) |
+| wuxingxiuye.json | 五行修业-点击领取十环 | roi | [920, 285, 326, 271] | 超宽(x+w=1246>500) |
+| wuxingxiuye.json | 五行修业-点击领取十环-确定 | roi | [677, 426, 146, 53] | 超宽(x+w=823>500) |
+| wuxingxiuye.json | 五行修业-领取任务成功 | roi | [1037, 165, 243, 394] | 超宽(x+w=1280>500) |
+| wuxingxiuye.json | 五行修业-任务完成-OCR | roi | [1037, 165, 243, 394] | 超宽(x+w=1280>500) |
+| yunbiao_renwu2.json | 主界面-运镖 | roi | [1197, 540, 78, 157] | 超宽(x+w=1275>500) |
+| yunbiao_renwu2.json | 活动-运镖 | roi | [350, 23, 600, 62] | 超宽(x+w=950>500) |
+| yunbiao_renwu2.json | 活动-运镖-开始 | roi | [316, 76, 834, 433] | 超宽(x+w=1150>500) |
+| yunbiao_renwu2.json | 运镖完成onerror | roi | [1197, 540, 78, 157] | 超宽(x+w=1275>500) |
+| yunbiao_renwu2.json | 点击押送普通镖银(三次) | roi | [933, 262, 307, 237] | 超宽(x+w=1240>500) |
+| yunbiao_renwu2.json | 点击押送普通镖_确定 | roi | [656, 367, 189, 96] | 超宽(x+w=845>500) |
+| zhengli_baibao.json | 整理背包-过渡 | roi | [1206, 637, 66, 57] | 超宽(x+w=1272>500) |
+| zhengli_baibao.json | 打开背包成功-向上滑动到顶端 | roi | [335, 5, 577, 68] | 超宽(x+w=912>500) |
+| zhengli_baibao.json | 点击整理 | roi | [873, 609, 241, 77] | 超宽(x+w=1114>500) |
+| zhengli_baibao.json | 背包向上滑动10次 | begin | [907, 462, 1, 1] | 超宽(x+w=908>500) |
+| zhengli_baibao.json | 背包向上滑动10次 | end | [907, 363, 1, 1] | 超宽(x+w=908>500) |
+| zhengli_baibao.json | 背包向上滑动20次 | begin | [907, 462, 1, 1] | 超宽(x+w=908>500) |
+| zhengli_baibao.json | 背包向上滑动20次 | end | [907, 363, 1, 1] | 超宽(x+w=908>500) |
+| zhengli_baibao.json | 使用 | roi | [448, 451, 402, 156] | 超宽(x+w=850>500) |
+| zhengli_baibao.json | 点击批量使用_心魔宝珠 | roi | [423, 429, 169, 80] | 超宽(x+w=592>500) |
+| zhengli_baibao.json | 背包向上滑动1 | begin | [907, 462, 1, 1] | 超宽(x+w=908>500) |
+| zhengli_baibao.json | 背包向上滑动1 | end | [907, 363, 1, 1] | 超宽(x+w=908>500) |
+| zhengli_baibao.json | 点击商会出售——满 | roi | [740, 364, 75, 68] | 超宽(x+w=815>500) |
+| zhengli_baibao.json | 点击商会出售——满——出售 | roi | [524, 529, 234, 68] | 超宽(x+w=758>500) |
+| zhengli_baibao.json | 合成阵法 | roi | [618, 140, 479, 479] | 超宽(x+w=1097>500) |
+| zhengli_baibao.json | 点击阵法使用 | roi | [424, 419, 161, 62] | 超宽(x+w=585>500) |
+| zhengli_baibao.json | 使用过期物品 | roi | [618, 140, 479, 479] | 超宽(x+w=1097>500) |
+| zhengli_baibao.json | 使用过期物品-使用 | roi | [387, 354, 210, 278] | 超宽(x+w=597>500) |
+| zhengli_baibao.json | 使用秘境材料 | roi | [618, 140, 479, 479] | 超宽(x+w=1097>500) |
+| zhengli_baibao.json | 秘境材料-收入 | roi | [437, 427, 134, 48] | 超宽(x+w=571>500) |
+| zhengli_baibao.json | 点击整理-interrupt一轮 | roi | [873, 609, 241, 77] | 超宽(x+w=1114>500) |
+| zhengli_baibao.json | 整理完成 | roi | [905, 543, 187, 94] | 超宽(x+w=1092>500) |
+| zhuoguirenwu.json | 识别位置-长安城-抓鬼-过渡 | roi | [1206, 637, 66, 57] | 超宽(x+w=1272>500) |
+| zhuoguirenwu.json | 钟馗-捉鬼任务-已领取捉鬼任务 | roi | [872, 94, 355, 441] | 超宽(x+w=1227>500) |
+| zhuoguirenwu.json | 钟馗-捉鬼任务-循环 | roi | [925, 73, 312, 482] | 超宽(x+w=1237>500) |
+| zhuoguirenwu.json | 展开-首页任务栏 | roi | [1200, 114, 79, 62] | 超宽(x+w=1279>500) |
+| zhuoguirenwu.json | 任务栏切换为任务 | roi | [1047, 119, 35, 35] | 超宽(x+w=1082>500) |
+| zhuoguirenwu.json | 任务栏切换为任务 | target | [1044, 115, 101, 50] | 超宽(x+w=1145>500) |
+| zhuoguirenwu.json | 捉鬼-没有辅助提示-点击取消 | roi | [403, 367, 265, 124] | 超宽(x+w=668>500) |
+| zhuoguirenwu.json | 捉鬼-领取双倍点数弹窗 | roi | [430, 300, 393, 100] | 超宽(x+w=823>500) |
+| zhuoguirenwu.json | 捉鬼-领取双倍点数弹窗 | target | [718, 403, 57, 31] | 超宽(x+w=775>500) |
+| zhuoguirenwu.json | 捉鬼-领取任务失败-再次尝试领取-点击捉鬼任务 | roi | [925, 73, 312, 482] | 超宽(x+w=1237>500) |
+| zhuoguirenwu.json | 点击任务栏-捉鬼任务 | roi | [1035, 170, 243, 334] | 超宽(x+w=1278>500) |
+| zhuoguirenwu.json | 抓鬼一轮完成 | roi | [420, 270, 450, 110] | 超宽(x+w=870>500) |
+| zhuoguirenwu.json | 抓鬼一轮完成 | target | [718, 403, 57, 31] | 超宽(x+w=775>500) |
+| zhuoguirenwu.json | 抓鬼一轮完成-再次点击确定 | target | [718, 403, 57, 31] | 超宽(x+w=775>500) |
+| zhuoguirenwu.json | 抓鬼-识别队伍离线/暂离 | roi | [341, 432, 757, 41] | 超宽(x+w=1098>500) |
+| zhuoguirenwu.json | 抓鬼-踢出离线（暂离）人员 | roi | [336, 153, 767, 295] | 超宽(x+w=1103>500) |
+| zhuoguirenwu.json | 捉鬼-点击自动匹配 | roi | [1024, 57, 152, 60] | 超宽(x+w=1176>500) |
+| zhuoguirenwu.json | 抓鬼-未识别队伍离线/暂离 | roi | [341, 433, 749, 40] | 超宽(x+w=1090>500) |
+| zhuoguirenwu.json | 捉鬼-点击自动匹配2 | roi | [1024, 57, 152, 60] | 超宽(x+w=1176>500) |
+| zhuoguirenwu.json | 捉鬼-未识别到自动匹配2 | roi | [1024, 57, 152, 60] | 超宽(x+w=1176>500) |
+| zhuoguirenwu.json | 抓鬼-关闭组队界面 | roi | [1153, 0, 100, 98] | 超宽(x+w=1253>500) |
